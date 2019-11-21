@@ -2,6 +2,7 @@ import pygame
 
 pygame.init()
 win = pygame.display.set_mode((1280, 720))
+pygame.display.set_icon(pygame.image.load('pixil-frame-0.png'))
 Game_Name = 'Ванильный питон'
 
 pygame.display.set_caption(Game_Name)
@@ -10,8 +11,8 @@ white = (255, 255, 255)
 black = (0, 0, 0)
 
 background = pygame.image.load('Background.png')
-hero = pygame.image.load('Hero — копия.png')
-
+# hero = pygame.image.load('Hero smoke.png')
+# hero = pygame.transform.scale(hero, (35, 115))
 clock = pygame.time.Clock()
 
 width = 35
@@ -24,31 +25,34 @@ isJump = False
 jumpCount = 10
 
 left = False
-right = False
+right = True
 animCount = 0
 
-# img = pygame.image.load('IMG_0470.gif')
 
-
-def draw_window():
-    # win.fill(white)
-    # global animCount
-    win.blit(background, (0, 0))
-    win.blit(hero, (x, y))
-
-    pygame.display.update()
-
-
-run = True
-while run:
-    clock.tick(60)
-
+def game_quit():
+    global run
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 run = False
+
+
+def draw_window():
+    global animCount
+    win.blit(background, (0, 0))
+    if left:
+        win.blit(pygame.transform.scale(pygame.image.load('Hero left.png'), (35, 115)), (x, y))
+    if right:
+        win.blit(pygame.transform.scale(pygame.image.load('Hero right.png'), (35, 115)), (x, y))
+    pygame.display.update()
+
+
+run = True
+while run:
+    clock.tick(60)
+    game_quit()
 
     keys = pygame.key.get_pressed()
     if (keys[pygame.K_LEFT] and x > 5) or (keys[pygame.K_a] and x > 5):
