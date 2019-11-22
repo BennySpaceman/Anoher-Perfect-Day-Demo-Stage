@@ -58,16 +58,16 @@ def draw_window():
     global smokeAnimCount
     if animCount + 1 >= 20:
         animCount = 0
-    if smokeAnimCount +1 >= 10:
+    if smokeAnimCount + 1 >= 20:
         smokeAnimCount = 0
 
     win.blit(background, (0, 0))
 
     if left and not isRunning and not isJump:
-        win.blit(pygame.transform.scale(hero_stands_left[smokeAnimCount // 5], (35, 115)), (x, y))
+        win.blit(pygame.transform.scale(hero_stands_left[smokeAnimCount // 10], (35, 115)), (x, y))
         smokeAnimCount += 1
     if right and not isRunning and not isJump:
-        win.blit(pygame.transform.scale(hero_stands_right[smokeAnimCount // 5], (35, 115)), (x, y))
+        win.blit(pygame.transform.scale(hero_stands_right[smokeAnimCount // 10], (35, 115)), (x, y))
         smokeAnimCount += 1
     if right and isRunning and not isJump:
         win.blit(pygame.transform.scale(hero_run_right[animCount // 5], (55, 115)), (x, y))
