@@ -81,12 +81,18 @@ def f_hero_jump_right():
 
 def game_quit():
     global game_running
+    global isRunning
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game_running = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 game_running = False
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+                isRunning = False
+            if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+                isRunning = False
 
 
 def draw_window():
@@ -108,12 +114,6 @@ def draw_window():
     f_hero_jump_left()
     f_hero_jump_right()
 
-    for bla in pygame.event.get():
-        if bla.type == pygame.KEYUP:
-            if bla.key == pygame.K_RIGHT or bla.key == pygame.K_d:
-                isRunning = False
-            if bla.key == pygame.K_LEFT or bla.key == pygame.K_a:
-                isRunning = False
     pygame.display.update()
 
 
@@ -134,7 +134,7 @@ def jump():
 
 
 while game_running:
-    clock.tick(120)
+    clock.tick(60)
     game_quit()
 
     keys = pygame.key.get_pressed()
@@ -155,4 +155,5 @@ while game_running:
     else:
         jump()
     draw_window()
+
 pygame.quit()
