@@ -148,15 +148,16 @@ def jump():
     global isJump
     global y
     global x
-    if jumpCount >= -10:
-        if jumpCount < 0:
-            y += (jumpCount ** 2) / 1.8
+    if not isSitting:
+        if jumpCount >= -10:
+            if jumpCount < 0:
+                y += (jumpCount ** 2) / 1.8
+            else:
+                y -= (jumpCount ** 2) / 1.8
+            jumpCount -= 1
         else:
-            y -= (jumpCount ** 2) / 1.8
-        jumpCount -= 1
-    else:
-        isJump = False
-        jumpCount = 10
+            isJump = False
+            jumpCount = 10
 
 
 def key_events():
@@ -164,6 +165,8 @@ def key_events():
     global isRunning
     global isShooting
     global isSitting
+    global facing
+    global isJump
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game_running = False
@@ -205,16 +208,17 @@ while game_running:
 
     keys = pygame.key.get_pressed()
 
-    if (keys[pygame.K_LEFT] and x > 5) or (keys[pygame.K_a] and x > 5):
-        x -= speed
-        left = True
-        right = False
-        isRunning = True
-    if (keys[pygame.K_RIGHT] and x < (1280 - width - 5)) or (keys[pygame.K_d] and x < (1280 - width - 5)):
-        x += speed
-        left = False
-        right = True
-        isRunning = True
+    if not isSitting:
+        if (keys[pygame.K_LEFT] and x > 5) or (keys[pygame.K_a] and x > 5):
+            x -= speed
+            left = True
+            right = False
+            isRunning = True
+        if (keys[pygame.K_RIGHT] and x < (1280 - width - 5)) or (keys[pygame.K_d] and x < (1280 - width - 5)):
+            x += speed
+            left = False
+            right = True
+            isRunning = True
 
     if not isJump:
         if keys[pygame.K_w] or keys[pygame.K_UP]:
