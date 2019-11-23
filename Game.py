@@ -24,7 +24,7 @@ hero_stands_right = [pygame.image.load('Hero/Hero stand right.png'),
 
 background = pygame.transform.scale(pygame.image.load('Background.png'), (1280, 720))
 pygame.mixer.music.load('Soundtrack.mp3')
-pygame.mixer.music.play()
+pygame.mixer.music.play(-1)
 clock = pygame.time.Clock()
 
 width = 55
