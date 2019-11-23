@@ -23,13 +23,15 @@ hero_stands_right = [pygame.image.load('Hero/Hero stand right.png'),
                      pygame.image.load('Hero/Hero smoke right.png')]
 
 background = pygame.transform.scale(pygame.image.load('Background.png'), (1280, 720))
+pygame.mixer.music.load('Soundtrack.mp3')
+pygame.mixer.music.play()
 clock = pygame.time.Clock()
 
 width = 55
 height = 115
 speed = 5
 x = 50
-y = 720 - height - 50
+y = 720 - height - 37
 
 game_running = True
 left = False
