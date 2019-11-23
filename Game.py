@@ -28,7 +28,7 @@ pygame.mixer.music.play(-1)
 pygame.mixer.music.set_volume(0.25)
 clock = pygame.time.Clock()
 
-width = 55
+width = 70
 height = 115
 speed = 5
 x = 50
@@ -39,63 +39,70 @@ left = False
 right = True
 isRunning = False
 isJump = False
+isShooting = False
 jumpCount = 10
 animCount = 0
 smokeAnimCount = 0
 
 
+class BulletClass:
+    def __init__(self, x, y, facing):
+        self.x = x
+        self.y = y
+        self.facing = facing
+        self.bullet_speed = 12 * facing
+
+    def draw(self, win):
+        win.blit(pygame.transform.scale(pygame.image.load('Bullet GG.png'), (5, 3)), (self.x, self.y))
+        # pygame.draw.circle(win, self.color, (self.x, self.y), self.radius)
+
+
 def f_hero_stands_left():
     global smokeAnimCount
-    if not isJump and not isRunning and left:
-        win.blit(pygame.transform.scale(hero_stands_left[smokeAnimCount // 10], (35, 115)), (x, y))
+    if not isShooting and not isJump and not isRunning and left:
+        win.blit(pygame.transform.scale(hero_stands_left[smokeAnimCount // 10], (70, 115)), (x, y))
         smokeAnimCount += 1
 
 
 def f_hero_stands_right():
     global smokeAnimCount
-    if not isJump and not isRunning and right:
-        win.blit(pygame.transform.scale(hero_stands_right[smokeAnimCount // 10], (35, 115)), (x, y))
+    if not isShooting and not isJump and not isRunning and right:
+        win.blit(pygame.transform.scale(hero_stands_right[smokeAnimCount // 10], (70, 115)), (x, y))
         smokeAnimCount += 1
 
 
 def f_hero_run_left():
     global animCount
-    if not isJump and isRunning and left:
-        win.blit(pygame.transform.scale(hero_run_left[animCount // 5], (55, 115)), (x, y))
+    if not isShooting and not isJump and isRunning and left:
+        win.blit(pygame.transform.scale(hero_run_left[animCount // 5], (70, 115)), (x, y))
         animCount += 1
 
 
 def f_hero_run_right():
     global animCount
-    if not isJump and isRunning and right:
-        win.blit(pygame.transform.scale(hero_run_right[animCount // 5], (55, 115)), (x, y))
+    if not isShooting and not isJump and isRunning and right:
+        win.blit(pygame.transform.scale(hero_run_right[animCount // 5], (70, 115)), (x, y))
         animCount += 1
 
 
 def f_hero_jump_left():
-    if isJump and left:
-        win.blit(pygame.transform.scale(pygame.image.load('Hero/Hero jump left.png'), (68, 108)), (x, y))
+    if not isShooting and isJump and left:
+        win.blit(pygame.transform.scale(pygame.image.load('Hero/Hero jump left.png'), (70, 115)), (x, y))
 
 
 def f_hero_jump_right():
-    if isJump and right:
-        win.blit(pygame.transform.scale(pygame.image.load('Hero/Hero jump right.png'), (68, 108)), (x, y))
+    if not isShooting and isJump and right:
+        win.blit(pygame.transform.scale(pygame.image.load('Hero/Hero jump right.png'), (70, 115)), (x, y))
 
 
-def game_quit():
-    global game_running
-    global isRunning
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            game_running = False
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE:
-                game_running = False
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
-                isRunning = False
-            if event.key == pygame.K_LEFT or event.key == pygame.K_a:
-                isRunning = False
+def f_hero_shoot_left():
+    if isShooting and left:
+        win.blit(pygame.transform.scale(pygame.image.load('Hero/Hero shoot left.png'), (70, 115)), (x, y))
+
+
+def f_hero_shoot_right():
+    if isShooting and right:
+        win.blit(pygame.transform.scale(pygame.image.load('Hero/Hero shoot right.png'), (70, 115)), (x, y))
 
 
 def draw_window():
@@ -116,6 +123,10 @@ def draw_window():
     f_hero_run_right()
     f_hero_jump_left()
     f_hero_jump_right()
+    f_hero_shoot_left()
+    f_hero_shoot_right()
+    for bullet in bullets:
+        bullet.draw(win)
 
     pygame.display.update()
 
@@ -136,11 +147,47 @@ def jump():
         jumpCount = 10
 
 
+def key_events():
+    global game_running
+    global isRunning
+    global isShooting
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            game_running = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                game_running = False
+            if event.key == pygame.K_f:
+                isShooting = True
+                if right:
+                    facing = 1
+                if left:
+                    facing = -1
+                bullets.append(BulletClass(round(x + width // 2), round(y + height - 77), facing))
+
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+                isRunning = False
+            if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+                isRunning = False
+            if event.key == pygame.K_f:
+                isShooting = False
+
+
+bullets = []
+
 while game_running:
     clock.tick(60)
-    game_quit()
+    key_events()
+
+    for bullet in bullets:
+        if 1280 > bullet.x > 0:
+            bullet.x += bullet.bullet_speed
+        else:
+            bullets.pop(bullets.index(bullet))
 
     keys = pygame.key.get_pressed()
+
     if (keys[pygame.K_LEFT] and x > 5) or (keys[pygame.K_a] and x > 5):
         x -= speed
         left = True
