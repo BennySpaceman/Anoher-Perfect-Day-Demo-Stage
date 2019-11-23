@@ -40,6 +40,7 @@ right = True
 isRunning = False
 isJump = False
 isShooting = False
+isSitting = False
 jumpCount = 10
 animCount = 0
 smokeAnimCount = 0
@@ -58,50 +59,60 @@ class BulletClass:
 
 def f_hero_stands_left():
     global smokeAnimCount
-    if not isShooting and not isJump and not isRunning and left:
+    if not isSitting and not isShooting and not isJump and not isRunning and left:
         win.blit(pygame.transform.scale(hero_stands_left[smokeAnimCount // 10], (width, height)), (x, y))
         smokeAnimCount += 1
 
 
 def f_hero_stands_right():
     global smokeAnimCount
-    if not isShooting and not isJump and not isRunning and right:
+    if not isSitting and not isShooting and not isJump and not isRunning and right:
         win.blit(pygame.transform.scale(hero_stands_right[smokeAnimCount // 10], (width, height)), (x, y))
         smokeAnimCount += 1
 
 
 def f_hero_run_left():
     global animCount
-    if not isShooting and not isJump and isRunning and left:
+    if not isSitting and not isShooting and not isJump and isRunning and left:
         win.blit(pygame.transform.scale(hero_run_left[animCount // 5], (width, height)), (x, y))
         animCount += 1
 
 
 def f_hero_run_right():
     global animCount
-    if not isShooting and not isJump and isRunning and right:
+    if not isSitting and not isShooting and not isJump and isRunning and right:
         win.blit(pygame.transform.scale(hero_run_right[animCount // 5], (width, height)), (x, y))
         animCount += 1
 
 
 def f_hero_jump_left():
-    if not isShooting and isJump and left:
+    if not isSitting and not isShooting and isJump and left:
         win.blit(pygame.transform.scale(pygame.image.load('Hero/Hero jump left.png'), (width, height)), (x, y))
 
 
 def f_hero_jump_right():
-    if not isShooting and isJump and right:
+    if not isSitting and not isShooting and isJump and right:
         win.blit(pygame.transform.scale(pygame.image.load('Hero/Hero jump right.png'), (width, height)), (x, y))
 
 
 def f_hero_shoot_left():
-    if isShooting and left:
+    if not isSitting and isShooting and left:
         win.blit(pygame.transform.scale(pygame.image.load('Hero/Hero shoot left.png'), (width, height)), (x, y))
 
 
 def f_hero_shoot_right():
-    if isShooting and right:
+    if not isSitting and isShooting and right:
         win.blit(pygame.transform.scale(pygame.image.load('Hero/Hero shoot right.png'), (width, height)), (x, y))
+
+
+def f_hero_sit_left():
+    if isSitting and left:
+        win.blit(pygame.transform.scale(pygame.image.load('Hero/Hero sit left.png'), (width, height)), (x, y))
+
+
+def f_hero_sit_right():
+    if isSitting and right:
+        win.blit(pygame.transform.scale(pygame.image.load('Hero/Hero sit right.png'), (width, height)), (x, y))
 
 
 def draw_window():
@@ -124,6 +135,8 @@ def draw_window():
     f_hero_jump_right()
     f_hero_shoot_left()
     f_hero_shoot_right()
+    f_hero_sit_left()
+    f_hero_sit_right()
     for bullet in bullets:
         bullet.draw(win)
 
@@ -150,6 +163,7 @@ def key_events():
     global game_running
     global isRunning
     global isShooting
+    global isSitting
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game_running = False
@@ -163,6 +177,8 @@ def key_events():
                 if left:
                     facing = -1
                 bullets.append(BulletClass(round(x + width // 2), round(y + height - 92), facing))
+            if event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                isSitting = True
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
@@ -171,6 +187,8 @@ def key_events():
                 isRunning = False
             if event.key == pygame.K_SPACE:
                 isShooting = False
+            if event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                isSitting = False
 
 
 bullets = []
