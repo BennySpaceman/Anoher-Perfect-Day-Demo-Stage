@@ -116,9 +116,7 @@ def f_hero_sit_right():
 
 
 def draw_window():
-    global isRunning
-    global animCount
-    global smokeAnimCount
+    global isRunning, animCount, smokeAnimCount
 
     win.blit(background, (0, 0))
 
@@ -144,10 +142,7 @@ def draw_window():
 
 
 def jump():
-    global jumpCount
-    global isJump
-    global y
-    global x
+    global jumpCount, isJump, y, x
     if not isSitting:
         if jumpCount >= -10:
             if jumpCount < 0:
@@ -161,12 +156,7 @@ def jump():
 
 
 def key_events():
-    global game_running
-    global isRunning
-    global isShooting
-    global isSitting
-    global facing
-    global isJump
+    global game_running, isRunning, isShooting, isSitting, facing, isJump
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game_running = False
