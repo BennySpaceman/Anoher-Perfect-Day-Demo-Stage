@@ -22,7 +22,7 @@ hero_stands_left = [pygame.image.load('Hero/Hero stand left.png'),
 hero_stands_right = [pygame.image.load('Hero/Hero stand right.png'),
                      pygame.image.load('Hero/Hero smoke right.png')]
 
-background = pygame.transform.scale(pygame.image.load('Background.png'), (1280, 720))
+background = pygame.transform.scale(pygame.image.load('Warehouse level.png'), (1280, 720))
 pygame.mixer.music.load('Soundtrack.mp3')
 pygame.mixer.music.play(-1)
 pygame.mixer.music.set_volume(0.25)
@@ -32,7 +32,7 @@ width = 84
 height = 138
 speed = 5
 x = 50
-y = 720 - height - 37
+y = 720 - height - 20
 
 game_running = True
 left = False
