@@ -67,14 +67,16 @@ class BulletClass:
 def f_hero_stands_left():
     global smokeAnimCount
     if not isSitting and not isShooting and not isJump and not isRunning and left:
-        win.blit(pygame.transform.scale(hero_stands_left[smokeAnimCount // 10], (hero_width, hero_height)), (hero_x, hero_y))
+        win.blit(pygame.transform.scale(hero_stands_left[smokeAnimCount // 10],
+                                        (hero_width, hero_height)), (hero_x, hero_y))
         smokeAnimCount += 1
 
 
 def f_hero_stands_right():
     global smokeAnimCount
     if not isSitting and not isShooting and not isJump and not isRunning and right:
-        win.blit(pygame.transform.scale(hero_stands_right[smokeAnimCount // 10], (hero_width, hero_height)), (hero_x, hero_y))
+        win.blit(pygame.transform.scale(hero_stands_right[smokeAnimCount // 10],
+                                        (hero_width, hero_height)), (hero_x, hero_y))
         smokeAnimCount += 1
 
 
@@ -242,8 +244,8 @@ while game_running:
             left = True
             right = False
             isRunning = True
-        if (keys[pygame.K_RIGHT] and hero_x < (display_width - hero_width - 5)) or (keys[pygame.K_d] and
-                                                                               x < (display_width - hero_width - 5)):
+        if (keys[pygame.K_RIGHT] and hero_x < (display_width - hero_width - 5)) or \
+                (keys[pygame.K_d] and hero_x < (display_width - hero_width - 5)):
             hero_x += speed
             left = False
             right = True
