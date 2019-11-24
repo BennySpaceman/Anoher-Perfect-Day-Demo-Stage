@@ -184,7 +184,7 @@ def key_events():
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 game_running = False
-            if event.key == pygame.K_SPACE:
+            if event.key == pygame.K_SPACE and not isSitting:
                 isShooting = True
                 if right:
                     facing = 1
