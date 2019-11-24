@@ -34,7 +34,7 @@ hero_stands_right = [pygame.image.load('Hero/Hero stand right.png'),
                      pygame.image.load('Hero/Hero smoke right.png')]
 
 background = pygame.transform.scale(pygame.image.load('Warehouse level.png'), (display_width, display_height))
-pygame.mixer.music.load('Soundtrack.mp3')
+pygame.mixer.music.load('Asdf.mp3')
 pygame.mixer.music.play(-1)
 pygame.mixer.music.set_volume(0.25)
 clock = pygame.time.Clock()
