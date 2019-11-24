@@ -16,7 +16,8 @@ Game_Name = 'Ванильный питон'
 win = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_icon(pygame.image.load('Mascot.png'))
 pygame.display.set_caption(Game_Name)
-badguy_stand_right = pygame.transform.scale(pygame.image.load('Bad guy/Bad guy stand right.png'), (51, 138))
+badguy_stand_right = [pygame.image.load('Bad guy/Bad guy smoke 1.png'),
+                      pygame.image.load('Bad guy/Bad guy smoke 2.png')]
 hero_run_right = [pygame.image.load('Hero/Hero run right(1).png'),
                   pygame.image.load('Hero/Hero run right(2).png'),
                   pygame.image.load('Hero/Hero run right(3).png'),
@@ -34,7 +35,7 @@ hero_stands_right = [pygame.image.load('Hero/Hero stand right.png'),
                      pygame.image.load('Hero/Hero smoke right.png')]
 
 background = pygame.transform.scale(pygame.image.load('Warehouse level.png'), (display_width, display_height))
-pygame.mixer.music.load('Asdf.mp3')
+pygame.mixer.music.load('Soundtrack.mp3')
 pygame.mixer.music.play(-1)
 pygame.mixer.music.set_volume(0.25)
 clock = pygame.time.Clock()
@@ -48,6 +49,7 @@ isShooting = False
 isSitting = False
 jumpCount = 10
 animCount = 0
+animCountBadGuy = 0
 smokeAnimCount = 0
 facing = 1
 
@@ -153,8 +155,19 @@ def draw_hero():
 
 
 def draw_badguy():
-    win.blit(badguy_stand_right, (badguy_x, badguy_y))
+    global animCountBadGuy
+    if animCountBadGuy + 1 >= 60:
+        animCountBadGuy = 0
+    win.blit(pygame.transform.scale(badguy_stand_right[animCountBadGuy // 30], (84, 138)), (badguy_x, badguy_y))
+    animCountBadGuy += 1
 
+
+def f_hero_stands_left():
+    global smokeAnimCount
+    if not isSitting and not isShooting and not isJump and not isRunning and left:
+        win.blit(pygame.transform.scale(hero_stands_left[smokeAnimCount // 10],
+                                        (hero_width, hero_height)), (hero_x, hero_y))
+        smokeAnimCount += 1
 
 def jump():
     global jumpCount, isJump, hero_y, hero_x
