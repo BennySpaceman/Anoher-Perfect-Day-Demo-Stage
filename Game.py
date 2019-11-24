@@ -162,13 +162,6 @@ def draw_badguy():
     animCountBadGuy += 1
 
 
-def f_hero_stands_left():
-    global smokeAnimCount
-    if not isSitting and not isShooting and not isJump and not isRunning and left:
-        win.blit(pygame.transform.scale(hero_stands_left[smokeAnimCount // 10],
-                                        (hero_width, hero_height)), (hero_x, hero_y))
-        smokeAnimCount += 1
-
 def jump():
     global jumpCount, isJump, hero_y, hero_x
     if not isSitting:
