@@ -9,7 +9,7 @@ hero_height = 138
 speed = 5
 hero_x = 50
 hero_y = display_height - hero_height - 20
-badguy_x = 120
+badguy_x = 350
 badguy_y = display_height - 690
 
 Game_Name = 'Ванильный питон'
