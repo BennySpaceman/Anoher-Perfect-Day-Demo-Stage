@@ -156,9 +156,9 @@ def draw_hero():
 
 def draw_badguy():
     global animCountBadGuy
-    if animCountBadGuy + 1 >= 60:
+    if animCountBadGuy + 1 >= 120:
         animCountBadGuy = 0
-    win.blit(pygame.transform.scale(badguy_stand_right[animCountBadGuy // 30], (84, 138)), (badguy_x, badguy_y))
+    win.blit(pygame.transform.scale(badguy_stand_right[animCountBadGuy // 60], (84, 138)), (badguy_x, badguy_y))
     animCountBadGuy += 1
 
 
