@@ -194,6 +194,30 @@ def key_events():
                 isSitting = False
 
 
+def print_text(message, x, y, font_color = (255, 255, 255), font_type = 'bahnschrift.ttf', font_size = 30):
+    font_type = pygame.font.Font(font_type, font_size)
+    text = font_type.render(message, True, font_color)
+    win.blit(text, (x, y))
+
+
+def pause():
+    global game_running
+    paused = True
+    while paused:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    quit()
+        print_text('Game is paused. Press ENTER to continue.', 400, 400)
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_RETURN]:
+            paused = False
+        pygame.display.update()
+        clock.tick(15)
+
+
 bullets = []
 
 while game_running:
@@ -207,7 +231,8 @@ while game_running:
             bullets.pop(bullets.index(bullet))
 
     keys = pygame.key.get_pressed()
-
+    if keys[pygame.K_LSHIFT]:
+        pause()
     if not isSitting:
         if (keys[pygame.K_LEFT] and x > 5) or (keys[pygame.K_a] and x > 5):
             x -= speed
