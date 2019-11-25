@@ -12,12 +12,14 @@ hero_y = display_height - hero_height - 20
 badguy_x = 350
 badguy_y = display_height - 690
 
-Game_Name = 'Ванильный питон'
+Game_Name = 'Another perfect day'
 win = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_icon(pygame.image.load('Mascot.png'))
 pygame.display.set_caption(Game_Name)
+
 badguy_stand_right = [pygame.image.load('Bad guy/Bad guy smoke 1.png'),
                       pygame.image.load('Bad guy/Bad guy smoke 2.png')]
+
 hero_run_right = [pygame.image.load('Hero/Hero run right(1).png'),
                   pygame.image.load('Hero/Hero run right(2).png'),
                   pygame.image.load('Hero/Hero run right(3).png'),
@@ -47,9 +49,10 @@ isRunning = False
 isJump = False
 isShooting = False
 isSitting = False
+combat_theme = False
 jumpCount = 10
 animCount = 0
-animCountBadGuy = 0
+smokeAnimCountBadGuy = 0
 smokeAnimCount = 0
 facing = 1
 
@@ -155,11 +158,11 @@ def draw_hero():
 
 
 def draw_badguy():
-    global animCountBadGuy
-    if animCountBadGuy + 1 >= 120:
-        animCountBadGuy = 0
-    win.blit(pygame.transform.scale(badguy_stand_right[animCountBadGuy // 60], (84, 138)), (badguy_x, badguy_y))
-    animCountBadGuy += 1
+    global smokeAnimCountBadGuy
+    if smokeAnimCountBadGuy + 1 >= 120:
+        smokeAnimCountBadGuy = 0
+    win.blit(pygame.transform.scale(badguy_stand_right[smokeAnimCountBadGuy // 60], (84, 138)), (badguy_x, badguy_y))
+    smokeAnimCountBadGuy += 1
 
 
 def jump():
@@ -177,7 +180,7 @@ def jump():
 
 
 def key_events():
-    global game_running, isRunning, isShooting, isSitting, facing, isJump
+    global game_running, isRunning, isShooting, isSitting, facing, isJump, combat_theme
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game_running = False
@@ -193,6 +196,8 @@ def key_events():
                 bullets.append(BulletClass(round(hero_x + hero_width // 2), round(hero_y + hero_height - 92), facing))
             if event.key == pygame.K_DOWN or event.key == pygame.K_s:
                 isSitting = True
+            if event.key == pygame.K_t:
+                combat_theme = True
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
@@ -222,11 +227,21 @@ def pause():
                 if event.key == pygame.K_ESCAPE:
                     quit()
         print_text('Game is paused. Press ENTER to continue.', 400, 400)
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_RETURN]:
+        p_keys = pygame.key.get_pressed()
+        if p_keys[pygame.K_RETURN]:
             paused = False
         pygame.display.update()
         clock.tick(15)
+
+
+def music_change_check():
+    global combat_theme
+    if combat_theme:
+        pygame.mixer.music.stop()
+        pygame.mixer.music.load('Main theme.mp3')
+        pygame.mixer.music.play(-1)
+        pygame.mixer.music.set_volume(0.25)
+        combat_theme = False
 
 
 bullets = []
@@ -234,6 +249,7 @@ bullets = []
 while game_running:
     clock.tick(60)
     key_events()
+    music_change_check()
 
     for bullet in bullets:
         if display_width > bullet.bullet_x > 0:
