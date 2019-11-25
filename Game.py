@@ -56,6 +56,9 @@ smokeAnimCountBadGuy = 0
 smokeAnimCount = 0
 facing = 1
 
+platform_left = ((0, 405), (510, 535))
+platform_right = ((645, 1280), (510, 535))
+
 
 class BulletClass:
     def __init__(self, bullet_x, bullet_y, bullet_facing):
@@ -67,6 +70,18 @@ class BulletClass:
     def draw(self, display_name):
         display_name.blit(pygame.transform.scale(pygame.image.load('Bullet GG.png'), (5, 3)),
                           (self.bullet_x, self.bullet_y))
+
+
+def check_platform_above():
+    global isJump, jumpCount
+    if hero_x < platform_left[0][1] or (hero_x + hero_width) > platform_right[0][0]:
+
+        if hero_y < platform_left[1][1] and hero_y < platform_right[1][1]:
+            isJump = False
+            # jumpCount = 0
+            return False
+        else:
+            return True
 
 
 def f_hero_stands_left():
@@ -167,16 +182,17 @@ def draw_badguy():
 
 def jump():
     global jumpCount, isJump, hero_y, hero_x
-    if not isSitting:
-        if jumpCount >= -10:
-            if jumpCount < 0:
-                hero_y += (jumpCount ** 2) / 1.8
+    if not check_platform_above():
+        if not isSitting:
+            if jumpCount >= -10:
+                if jumpCount < 0:
+                    hero_y += (jumpCount ** 2) / 1.8
+                else:
+                    hero_y -= (jumpCount ** 2) / 1.8
+                jumpCount -= 1
             else:
-                hero_y -= (jumpCount ** 2) / 1.8
-            jumpCount -= 1
-        else:
-            isJump = False
-            jumpCount = 10
+                isJump = False
+                jumpCount = 10
 
 
 def key_events():
@@ -272,12 +288,12 @@ while game_running:
             left = False
             right = True
             isRunning = True
-
-    if not isJump:
-        if keys[pygame.K_w] or keys[pygame.K_UP]:
-            isJump = True
-    else:
-        jump()
+    if not check_platform_above():
+        if not isJump:
+            if keys[pygame.K_w] or keys[pygame.K_UP]:
+                isJump = True
+        else:
+            jump()
     win.blit(background, (0, 0))
     draw_hero()
     draw_badguy()
