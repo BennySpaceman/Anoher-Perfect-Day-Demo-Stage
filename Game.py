@@ -73,15 +73,25 @@ class BulletClass:
 
 
 def check_platform_above():
-    global isJump, jumpCount
+    global isJump
+    # Если ГГ по оси x под балками
     if hero_x < platform_left[0][1] or (hero_x + hero_width) > platform_right[0][0]:
-
-        if hero_y < platform_left[1][1] and hero_y < platform_right[1][1]:
+        # Если ГГ находится под ними
+        if hero_y < platform_left[1][1]:
+            # Прекращаем прыжок. Проверка пройдена, балка сверху есть
             isJump = False
-            # jumpCount = 0
             return False
         else:
+            # Балки сверху нет
             return True
+
+
+def check_platform_below():
+    if hero_x < platform_left[0][1] or (hero_x + hero_width) > platform_right[0][0]:
+        if hero_y + hero_height == platform_left[1][1] - 1:
+            return True
+        else:
+            return False
 
 
 def f_hero_stands_left():
@@ -182,17 +192,16 @@ def draw_badguy():
 
 def jump():
     global jumpCount, isJump, hero_y, hero_x
-    if not check_platform_above():
-        if not isSitting:
-            if jumpCount >= -10:
-                if jumpCount < 0:
-                    hero_y += (jumpCount ** 2) / 1.8
-                else:
-                    hero_y -= (jumpCount ** 2) / 1.8
-                jumpCount -= 1
+    if not isSitting:
+        if jumpCount >= -10:
+            if jumpCount < 0:
+                hero_y += (jumpCount ** 2) / 1.8
             else:
-                isJump = False
-                jumpCount = 10
+                hero_y -= (jumpCount ** 2) / 1.8
+            jumpCount -= 1
+        else:
+            isJump = False
+            jumpCount = 10
 
 
 def key_events():
@@ -288,12 +297,12 @@ while game_running:
             left = False
             right = True
             isRunning = True
-    if not check_platform_above():
-        if not isJump:
-            if keys[pygame.K_w] or keys[pygame.K_UP]:
-                isJump = True
-        else:
-            jump()
+        if not check_platform_above():
+            if not isJump:
+                if keys[pygame.K_w] or keys[pygame.K_UP]:
+                    isJump = True
+            else:
+                jump()
     win.blit(background, (0, 0))
     draw_hero()
     draw_badguy()
