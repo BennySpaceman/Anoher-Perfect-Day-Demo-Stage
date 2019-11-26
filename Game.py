@@ -7,7 +7,7 @@ display_height = 720
 hero_width = 84
 hero_height = 138
 speed = 5
-hero_x = 50
+hero_x = 1200
 hero_y = display_height - hero_height - 20
 badguy_x = 350
 badguy_y = display_height - 690
@@ -50,6 +50,7 @@ isJump = False
 isShooting = False
 isSitting = False
 combat_theme = False
+action = False
 jumpCount = 10
 animCount = 0
 smokeAnimCountBadGuy = 0
@@ -58,6 +59,27 @@ facing = 1
 
 platform_left = ((0, 405), (510, 535))
 platform_right = ((645, 1280), (510, 535))
+
+
+class Button:
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+        self.inactive_clr = (13, 162, 58)
+        self.active_clr = (23, 204, 58)
+
+    def draw(self, x, y, message, action = None):
+        mouse = pygame.mouse.get_pos()
+        click = pygame.mouse.get_pressed()
+
+        if x < mouse[0] < x + self.width:
+            if y < mouse[1] < y + self.height:
+                pygame.draw.rect(win, self.active_clr, (x, y, self.width, self.height))
+
+        else:
+                pygame.draw.rect(win, self.inactive_clr, (x, y, self.width, self.height))
+
+        print_text(message, x + 10, y + 10)
 
 
 class BulletClass:
@@ -70,16 +92,6 @@ class BulletClass:
     def draw(self, display_name):
         display_name.blit(pygame.transform.scale(pygame.image.load('Bullet GG.png'), (5, 3)),
                           (self.bullet_x, self.bullet_y))
-
-
-def check_platform_above():
-    global isJump
-    if hero_y > 535:
-        if hero_x < 405 or hero_x + hero_width > 645:
-            return True
-        else:
-            return False
-
 
 
 def f_hero_stands_left():
@@ -193,7 +205,7 @@ def jump():
 
 
 def key_events():
-    global game_running, isRunning, isShooting, isSitting, facing, isJump, combat_theme
+    global game_running, isRunning, isShooting, isSitting, facing, isJump, combat_theme, action
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game_running = False
@@ -211,6 +223,8 @@ def key_events():
                 isSitting = True
             if event.key == pygame.K_t:
                 combat_theme = True
+            if event.key == pygame.K_f:
+                action = True
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
@@ -221,6 +235,8 @@ def key_events():
                 isShooting = False
             if event.key == pygame.K_DOWN or event.key == pygame.K_s:
                 isSitting = False
+            if event.key == pygame.K_f:
+                action = False
 
 
 def print_text(message, x, y, font_color=(255, 255, 255), font_type='bahnschrift.ttf', font_size=30):
@@ -258,6 +274,8 @@ def music_change_check():
 
 
 bullets = []
+button = Button(100, 50)
+
 
 while game_running:
     clock.tick(60)
@@ -285,15 +303,20 @@ while game_running:
             left = False
             right = True
             isRunning = True
-        if not check_platform_above():
-            if not isJump:
-                if keys[pygame.K_w] or keys[pygame.K_UP]:
-                    isJump = True
-            else:
+        if not isJump:
+            if keys[pygame.K_w] or keys[pygame.K_UP]:
+                isJump = True
+        else:
                 jump()
     win.blit(background, (0, 0))
     draw_hero()
     draw_badguy()
+    if action:
+        if hero_x > 1050 and hero_x + hero_width < 1200 and hero_y > 540:
+            # button.draw(1000, 500, "I'd better not enter this door")
+            pygame.draw.rect(win, (0, 0, 0), (800, 465, 430, 80))
+            print_text("It's guard room", 820, 470)
+            print_text("I'd better not to enter this door", 820, 500)
     pygame.display.update()
 
 pygame.quit()
