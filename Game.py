@@ -74,24 +74,12 @@ class BulletClass:
 
 def check_platform_above():
     global isJump
-    # Если ГГ по оси x под балками
-    if hero_x < platform_left[0][1] or (hero_x + hero_width) > platform_right[0][0]:
-        # Если ГГ находится под ними
-        if hero_y < platform_left[1][1]:
-            # Прекращаем прыжок. Проверка пройдена, балка сверху есть
-            isJump = False
-            return False
-        else:
-            # Балки сверху нет
-            return True
-
-
-def check_platform_below():
-    if hero_x < platform_left[0][1] or (hero_x + hero_width) > platform_right[0][0]:
-        if hero_y + hero_height == platform_left[1][1] - 1:
+    if hero_y > 535:
+        if hero_x < 405 or hero_x + hero_width > 645:
             return True
         else:
             return False
+
 
 
 def f_hero_stands_left():
