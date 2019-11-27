@@ -7,7 +7,7 @@ display_height = 720
 hero_width = 84
 hero_height = 138
 speed = 5
-hero_x = 1200
+hero_x = 600
 hero_y = display_height - hero_height - 20
 badguy_x = 350
 badguy_y = display_height - 690
@@ -58,6 +58,7 @@ smokeAnimCountBadGuy = 0
 smokeAnimCount = 0
 facing = 1
 ladderCounterUp = 0
+ladderCounterDown = 0
 
 
 class Button:
@@ -281,8 +282,11 @@ while game_running:
     music_change_check()
     if ladderCounterUp > 0:
         # if ladderCounterUp % 2 == 0:
-        hero_y -= 3
+        hero_y -= 5
         ladderCounterUp -= 1
+    if ladderCounterDown > 0:
+        hero_y += 5
+        ladderCounterDown -= 1
 
     for bullet in bullets:
         if display_width > bullet.bullet_x > 0:
@@ -311,6 +315,8 @@ while game_running:
         else:
             jump()
     win.blit(background, (0, 0))
+    print_text(str(hero_x), 0, 0)
+    print_text(str(hero_y), 0, 30)
     draw_hero()
     draw_badguy()
     if hero_action:
@@ -319,8 +325,11 @@ while game_running:
             pygame.draw.rect(win, (0, 0, 0), (800, 465, 430, 80))
             print_text("It's guard room", 820, 470)
             print_text("I'd better not to enter this door", 820, 500)
-        if hero_x > 550 and hero_x + hero_width < 670 and hero_y > 540:
-            ladderCounterUp = 60
+        if hero_x > 480 and hero_x + hero_width < 675 and hero_y > 540:
+            ladderCounterUp = 35
+            # print_text('Script works', 550, 500)
+        if hero_x > 480 and hero_x + hero_width < 675 and 360 < hero_y < 380:
+            ladderCounterDown = 35
             print_text('Script works', 550, 500)
     pygame.display.update()
 
