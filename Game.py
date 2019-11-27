@@ -14,7 +14,7 @@ badguy_y = display_height - 690
 
 Game_Name = 'Another perfect day'
 win = pygame.display.set_mode((display_width, display_height))
-pygame.display.set_icon(pygame.image.load('Mascot.png'))
+pygame.display.set_icon(pygame.image.load('Game icon.png'))
 pygame.display.set_caption(Game_Name)
 
 badguy_stand_right = [pygame.image.load('Bad guy/Bad guy smoke 1.png'),
@@ -36,7 +36,8 @@ hero_stands_left = [pygame.image.load('Hero/Hero stand left.png'),
 hero_stands_right = [pygame.image.load('Hero/Hero stand right.png'),
                      pygame.image.load('Hero/Hero smoke right.png')]
 
-background = pygame.transform.scale(pygame.image.load('Warehouse level.png'), (display_width, display_height))
+background = pygame.transform.scale(pygame.image.load('Background (with new ladder).png'),
+                                    (display_width, display_height))
 pygame.mixer.music.load('Soundtrack.mp3')
 pygame.mixer.music.play(-1)
 pygame.mixer.music.set_volume(0.25)
@@ -68,14 +69,13 @@ class Button:
 
     def draw(self, x, y, message, action=None):
         mouse = pygame.mouse.get_pos()
-        click = pygame.mouse.get_pressed()
 
         if x < mouse[0] < x + self.width:
             if y < mouse[1] < y + self.height:
                 pygame.draw.rect(win, self.active_clr, (x, y, self.width, self.height))
 
         else:
-                pygame.draw.rect(win, self.inactive_clr, (x, y, self.width, self.height))
+            pygame.draw.rect(win, self.inactive_clr, (x, y, self.width, self.height))
 
         print_text(message, x + 10, y + 10)
 
@@ -309,7 +309,7 @@ while game_running:
             if keys[pygame.K_w] or keys[pygame.K_UP]:
                 isJump = True
         else:
-                jump()
+            jump()
     win.blit(background, (0, 0))
     draw_hero()
     draw_badguy()
