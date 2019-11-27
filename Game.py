@@ -50,15 +50,13 @@ isJump = False
 isShooting = False
 isSitting = False
 combat_theme = False
-action = False
+hero_action = False
 jumpCount = 10
 animCount = 0
 smokeAnimCountBadGuy = 0
 smokeAnimCount = 0
 facing = 1
-
-platform_left = ((0, 405), (510, 535))
-platform_right = ((645, 1280), (510, 535))
+ladderCounterUp = 0
 
 
 class Button:
@@ -68,7 +66,7 @@ class Button:
         self.inactive_clr = (13, 162, 58)
         self.active_clr = (23, 204, 58)
 
-    def draw(self, x, y, message, action = None):
+    def draw(self, x, y, message, action=None):
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
 
@@ -205,7 +203,7 @@ def jump():
 
 
 def key_events():
-    global game_running, isRunning, isShooting, isSitting, facing, isJump, combat_theme, action
+    global game_running, isRunning, isShooting, isSitting, facing, isJump, combat_theme, hero_action
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game_running = False
@@ -224,7 +222,7 @@ def key_events():
             if event.key == pygame.K_t:
                 combat_theme = True
             if event.key == pygame.K_f:
-                action = True
+                hero_action = True
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
@@ -236,7 +234,7 @@ def key_events():
             if event.key == pygame.K_DOWN or event.key == pygame.K_s:
                 isSitting = False
             if event.key == pygame.K_f:
-                action = False
+                hero_action = False
 
 
 def print_text(message, x, y, font_color=(255, 255, 255), font_type='bahnschrift.ttf', font_size=30):
@@ -281,6 +279,10 @@ while game_running:
     clock.tick(60)
     key_events()
     music_change_check()
+    if ladderCounterUp > 0:
+        # if ladderCounterUp % 2 == 0:
+        hero_y -= 3
+        ladderCounterUp -= 1
 
     for bullet in bullets:
         if display_width > bullet.bullet_x > 0:
@@ -311,12 +313,15 @@ while game_running:
     win.blit(background, (0, 0))
     draw_hero()
     draw_badguy()
-    if action:
+    if hero_action:
         if hero_x > 1050 and hero_x + hero_width < 1200 and hero_y > 540:
             # button.draw(1000, 500, "I'd better not enter this door")
             pygame.draw.rect(win, (0, 0, 0), (800, 465, 430, 80))
             print_text("It's guard room", 820, 470)
             print_text("I'd better not to enter this door", 820, 500)
+        if hero_x > 550 and hero_x + hero_width < 670 and hero_y > 540:
+            ladderCounterUp = 60
+            print_text('Script works', 550, 500)
     pygame.display.update()
 
 pygame.quit()
