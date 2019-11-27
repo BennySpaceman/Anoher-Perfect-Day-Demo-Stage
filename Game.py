@@ -36,7 +36,7 @@ hero_stands_left = [pygame.image.load('Hero/Hero stand left.png'),
 hero_stands_right = [pygame.image.load('Hero/Hero stand right.png'),
                      pygame.image.load('Hero/Hero smoke right.png')]
 
-background = pygame.transform.scale(pygame.image.load('All-new Background.png'),
+background = pygame.transform.scale(pygame.image.load('Warehouse Level (v.2.0).png'),
                                     (display_width, display_height))
 pygame.mixer.music.load('Soundtrack.mp3')
 pygame.mixer.music.play(-1)
@@ -281,7 +281,7 @@ while game_running:
     key_events()
     music_change_check()
     if ladderCounterUp == 1:
-        hero_y = 372
+        hero_y = 347
         ladderCounterUp = 0
     if ladderCounterUp > 0:
         # if ladderCounterUp % 2 == 0:
@@ -332,14 +332,14 @@ while game_running:
             print_text("It's guard room", 820, 470)
             print_text("I'd better not to enter this door", 820, 500)
         if hero_x > 490 and hero_x + hero_width < 600 and hero_y == 562:
-            ladderCounterUp = 35
+            ladderCounterUp = 43
             # print_text('Script works', 550, 500)
-        if hero_x > 490 and hero_x + hero_width < 600 and hero_y == 372:
-            ladderCounterDown = 35
+        if hero_x > 490 and hero_x + hero_width < 600 and hero_y == 347:
+            ladderCounterDown = 43
             # print_text('Script works', 550, 500)
-        if hero_x > 170 and hero_x + hero_width < 280 and hero_y == 372:
+        if hero_x > 170 and hero_x + hero_width < 280 and hero_y == 347:
             print_text("Wrong ladder", 200, 300)
-        if hero_x > 1100 and hero_x + hero_width < 1300 and hero_y == 372:
+        if hero_x > 1100 and hero_x + hero_width < 1300 and hero_y == 347:
             print_text('I need a keycard', 1000, 300)
     pygame.display.update()
 
