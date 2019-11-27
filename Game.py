@@ -36,7 +36,7 @@ hero_stands_left = [pygame.image.load('Hero/Hero stand left.png'),
 hero_stands_right = [pygame.image.load('Hero/Hero stand right.png'),
                      pygame.image.load('Hero/Hero smoke right.png')]
 
-background = pygame.transform.scale(pygame.image.load('Background (with new ladder).png'),
+background = pygame.transform.scale(pygame.image.load('All-new Background.png'),
                                     (display_width, display_height))
 pygame.mixer.music.load('Soundtrack.mp3')
 pygame.mixer.music.play(-1)
@@ -194,9 +194,9 @@ def jump():
     if not isSitting:
         if jumpCount >= -10:
             if jumpCount < 0:
-                hero_y += (jumpCount ** 2) / 1.8
+                hero_y += (jumpCount ** 2) / 3
             else:
-                hero_y -= (jumpCount ** 2) / 1.8
+                hero_y -= (jumpCount ** 2) / 3
             jumpCount -= 1
         else:
             isJump = False
@@ -280,10 +280,16 @@ while game_running:
     clock.tick(60)
     key_events()
     music_change_check()
+    if ladderCounterUp == 1:
+        hero_y = 372
+        ladderCounterUp = 0
     if ladderCounterUp > 0:
         # if ladderCounterUp % 2 == 0:
         hero_y -= 5
         ladderCounterUp -= 1
+    if ladderCounterDown == 1:
+        hero_y = 562
+        ladderCounterDown  = 0
     if ladderCounterDown > 0:
         hero_y += 5
         ladderCounterDown -= 1
@@ -325,12 +331,12 @@ while game_running:
             pygame.draw.rect(win, (0, 0, 0), (800, 465, 430, 80))
             print_text("It's guard room", 820, 470)
             print_text("I'd better not to enter this door", 820, 500)
-        if hero_x > 480 and hero_x + hero_width < 675 and hero_y > 540:
+        if hero_x > 490 and hero_x + hero_width < 600 and hero_y == 562:
             ladderCounterUp = 35
             # print_text('Script works', 550, 500)
-        if hero_x > 480 and hero_x + hero_width < 675 and 360 < hero_y < 380:
+        if hero_x > 490 and hero_x + hero_width < 600 and 360 < hero_y == 372:
             ladderCounterDown = 35
-            print_text('Script works', 550, 500)
+            # print_text('Script works', 550, 500)
     pygame.display.update()
 
 pygame.quit()
