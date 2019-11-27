@@ -36,6 +36,9 @@ hero_stands_left = [pygame.image.load('Hero/Hero stand left.png'),
 hero_stands_right = [pygame.image.load('Hero/Hero stand right.png'),
                      pygame.image.load('Hero/Hero smoke right.png')]
 
+hero_climb = [pygame.image.load('Hero/Hero climb (1).png'),
+              pygame.image.load('Hero/Hero climb (2).png')]
+
 background = pygame.transform.scale(pygame.image.load('Warehouse Level (v.2.0).png'),
                                     (display_width, display_height))
 pygame.mixer.music.load('Soundtrack.mp3')
@@ -50,6 +53,7 @@ isRunning = False
 isJump = False
 isShooting = False
 isSitting = False
+isClimb = False
 combat_theme = False
 hero_action = False
 jumpCount = 10
@@ -59,7 +63,7 @@ smokeAnimCount = 0
 facing = 1
 ladderCounterUp = 0
 ladderCounterDown = 0
-
+climbAnim = 0
 
 class Button:
     def __init__(self, width, height):
@@ -93,9 +97,28 @@ class BulletClass:
                           (self.bullet_x, self.bullet_y))
 
 
+# def show_menu():
+#     menu_background = pygame.image.load('In-game Menu.png')
+#     show = True
+#
+#     play_demo_button = Button(300, 70)
+#
+#     while show:
+#         for event in pygame.event.get():
+#             if event.type == pygame.QUIT:
+#                 pygame.quit()
+#                 quit()
+#
+#         win.blit(menu_background, (0, 0))
+#         play_demo_button.draw(300, 300, '', None, 50)
+#
+#         pygame.display.update()
+#         clock.tick(60)
+
+
 def f_hero_stands_left():
     global smokeAnimCount
-    if not isSitting and not isShooting and not isJump and not isRunning and left:
+    if not isClimb and not isSitting and not isShooting and not isJump and not isRunning and left:
         win.blit(pygame.transform.scale(hero_stands_left[smokeAnimCount // 10],
                                         (hero_width, hero_height)), (hero_x, hero_y))
         smokeAnimCount += 1
@@ -103,7 +126,7 @@ def f_hero_stands_left():
 
 def f_hero_stands_right():
     global smokeAnimCount
-    if not isSitting and not isShooting and not isJump and not isRunning and right:
+    if not isClimb and not isSitting and not isShooting and not isJump and not isRunning and right:
         win.blit(pygame.transform.scale(hero_stands_right[smokeAnimCount // 10],
                                         (hero_width, hero_height)), (hero_x, hero_y))
         smokeAnimCount += 1
@@ -179,6 +202,31 @@ def draw_hero():
     f_hero_sit_right()
     for i in bullets:
         i.draw(win)
+
+
+def ladder_climb():
+    global ladderCounterUp, ladderCounterDown, isClimb, hero_y, hero_x, climbAnim
+    if ladderCounterUp == 1:
+        hero_y = 347
+        ladderCounterUp = 0
+    if ladderCounterUp > 0:
+        hero_y -= 5
+        win.blit(pygame.transform.scale(hero_climb[climbAnim // 7], (84, 147)), (hero_x, hero_y))
+        ladderCounterUp -= 1
+        climbAnim += 1
+    if ladderCounterUp == 0:
+        isClimb = False
+    if ladderCounterDown == 1:
+        hero_y = 562
+        ladderCounterDown = 0
+    if ladderCounterDown > 0:
+        hero_y += 5
+        win.blit(pygame.transform.scale(hero_climb[climbAnim // 7], (84, 147)), (hero_x, hero_y))
+        ladderCounterDown -= 1
+    if ladderCounterDown == 0:
+        isClimb = False
+    if climbAnim + 1 > 14:
+        climbAnim = 0
 
 
 def draw_badguy():
@@ -275,24 +323,13 @@ def music_change_check():
 bullets = []
 button = Button(100, 50)
 
+# show_menu()
 
 while game_running:
-    clock.tick(60)
+    clock.tick(15)
     key_events()
     music_change_check()
-    if ladderCounterUp == 1:
-        hero_y = 347
-        ladderCounterUp = 0
-    if ladderCounterUp > 0:
-        # if ladderCounterUp % 2 == 0:
-        hero_y -= 5
-        ladderCounterUp -= 1
-    if ladderCounterDown == 1:
-        hero_y = 562
-        ladderCounterDown  = 0
-    if ladderCounterDown > 0:
-        hero_y += 5
-        ladderCounterDown -= 1
+
 
     for bullet in bullets:
         if display_width > bullet.bullet_x > 0:
@@ -324,6 +361,7 @@ while game_running:
     print_text(str(hero_x), 0, 0)
     print_text(str(hero_y), 0, 30)
     draw_hero()
+    ladder_climb()
     draw_badguy()
     if hero_action:
         if hero_x > 1050 and hero_x + hero_width < 1200 and hero_y == 562:
@@ -334,10 +372,12 @@ while game_running:
 
         if hero_x > 490 and hero_x + hero_width < 600 and hero_y == 562:
             ladderCounterUp = 43
+            isClimb = True
             # print_text('Script works', 550, 500)
 
         if hero_x > 490 and hero_x + hero_width < 600 and hero_y == 347:
             ladderCounterDown = 43
+            isClimb = True
             # print_text('Script works', 550, 500)
 
         if hero_x > 170 and hero_x + hero_width < 280 and hero_y == 347:
