@@ -194,9 +194,9 @@ def jump():
     if not isSitting:
         if jumpCount >= -10:
             if jumpCount < 0:
-                hero_y += (jumpCount ** 2) / 3
+                hero_y += (jumpCount ** 2) / 5
             else:
-                hero_y -= (jumpCount ** 2) / 3
+                hero_y -= (jumpCount ** 2) / 5
             jumpCount -= 1
         else:
             isJump = False
@@ -238,7 +238,7 @@ def key_events():
                 hero_action = False
 
 
-def print_text(message, x, y, font_color=(255, 255, 255), font_type='bahnschrift.ttf', font_size=30):
+def print_text(message, x, y, font_color=(255, 255, 255), font_type='Big Pixel Light demo.otf', font_size=20):
     font_type = pygame.font.Font(font_type, font_size)
     text = font_type.render(message, True, font_color)
     win.blit(text, (x, y))
@@ -326,7 +326,7 @@ while game_running:
     draw_hero()
     draw_badguy()
     if hero_action:
-        if hero_x > 1050 and hero_x + hero_width < 1200 and hero_y > 540:
+        if hero_x > 1050 and hero_x + hero_width < 1200 and hero_y == 562:
             # button.draw(1000, 500, "I'd better not enter this door")
             pygame.draw.rect(win, (0, 0, 0), (800, 465, 430, 80))
             print_text("It's guard room", 820, 470)
@@ -334,9 +334,13 @@ while game_running:
         if hero_x > 490 and hero_x + hero_width < 600 and hero_y == 562:
             ladderCounterUp = 35
             # print_text('Script works', 550, 500)
-        if hero_x > 490 and hero_x + hero_width < 600 and 360 < hero_y == 372:
+        if hero_x > 490 and hero_x + hero_width < 600 and hero_y == 372:
             ladderCounterDown = 35
             # print_text('Script works', 550, 500)
+        if hero_x > 170 and hero_x + hero_width < 280 and hero_y == 372:
+            print_text("Wrong ladder", 200, 300)
+        if hero_x > 1100 and hero_x + hero_width < 1300 and hero_y == 372:
+            print_text('I need a keycard', 1000, 300)
     pygame.display.update()
 
 pygame.quit()
