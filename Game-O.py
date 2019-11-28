@@ -57,6 +57,7 @@ isClimbUp = False
 isClimbDown = False
 combat_theme = False
 hero_action = False
+start_combat = False
 jumpCount = 10
 animCount = 0
 smokeAnimCountBadGuy = 0
@@ -326,73 +327,83 @@ def music_change_check():
         combat_theme = False
 
 
+# def second_part():
+#     if start_combat:
+#
+
 bullets = []
 button = Button(100, 50)
 
 # show_menu()
 
-while game_running:
-    clock.tick(60)
-    key_events()
-    music_change_check()
 
-    for bullet in bullets:
-        if display_width > bullet.bullet_x > 0:
-            bullet.bullet_x += bullet.bullet_speed
-        else:
-            bullets.pop(bullets.index(bullet))
+def game_cycle():
+    global isClimbUp, isClimbDown, hero_x, hero_y, left, right, isRunning, isJump, ladderCounterUp, ladderCounterDown, start_combat
+    while game_running:
+        clock.tick(60)
+        key_events()
+        music_change_check()
 
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_LSHIFT]:
-        pause()
-    if not isSitting and not isClimbUp and not isClimbDown:
-        if (keys[pygame.K_LEFT] and hero_x > 5) or (keys[pygame.K_a] and hero_x > 5):
-            hero_x -= speed
-            left = True
-            right = False
-            isRunning = True
-        if (keys[pygame.K_RIGHT] and hero_x < (display_width - hero_width - 5)) or \
-                (keys[pygame.K_d] and hero_x < (display_width - hero_width - 5)):
-            hero_x += speed
-            left = False
-            right = True
-            isRunning = True
-        if not isJump:
-            if keys[pygame.K_w] or keys[pygame.K_UP]:
-                isJump = True
-        else:
-            jump()
-    win.blit(background, (0, 0))
-    print_text(str(hero_x), 0, 0)
-    print_text(str(hero_y), 0, 30)
-    draw_hero()
-    ladder_climb()
-    draw_badguy()
-    if hero_action:
-        if hero_x > 1050 and hero_x + hero_width < 1200 and hero_y == 562:
-            # button.draw(1000, 500, "I'd better not enter this door")
-            pygame.draw.rect(win, (0, 0, 0), (800, 465, 430, 80))
-            print_text("It's guard room", 820, 470)
-            print_text("I'd better not to enter this door", 820, 500)
+        for bullet in bullets:
+            if display_width > bullet.bullet_x > 0:
+                bullet.bullet_x += bullet.bullet_speed
+            else:
+                bullets.pop(bullets.index(bullet))
 
-        if hero_x > 490 and hero_x + hero_width < 600 and hero_y == 562:
-            ladderCounterUp = 43
-            isClimbUp = True
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LSHIFT]:
+            pause()
+        if not isSitting and not isClimbUp and not isClimbDown:
+            if (keys[pygame.K_LEFT] and hero_x > 5) or (keys[pygame.K_a] and hero_x > 5):
+                hero_x -= speed
+                left = True
+                right = False
+                isRunning = True
+            if (keys[pygame.K_RIGHT] and hero_x < (display_width - hero_width - 5)) or \
+                    (keys[pygame.K_d] and hero_x < (display_width - hero_width - 5)):
+                hero_x += speed
+                left = False
+                right = True
+                isRunning = True
+            if not isJump:
+                if keys[pygame.K_w] or keys[pygame.K_UP]:
+                    isJump = True
+            else:
+                jump()
+        win.blit(background, (0, 0))
+        print_text(str(hero_x), 0, 0)
+        print_text(str(hero_y), 0, 30)
+        draw_hero()
+        ladder_climb()
+        draw_badguy()
+        if hero_action:
+            if hero_x > 1050 and hero_x + hero_width < 1200 and hero_y == 562:
+                # button.draw(1000, 500, "I'd better not enter this door")
+                pygame.draw.rect(win, (0, 0, 0), (800, 465, 430, 80))
+                print_text("It's guard room", 820, 470)
+                print_text("I'd better not to enter this door", 820, 500)
 
-        if hero_x > 490 and hero_x + hero_width < 600 and hero_y == 347:
-            ladderCounterDown = 43
-            isClimbDown = True
+            if hero_x > 490 and hero_x + hero_width < 600 and hero_y == 562:
+                ladderCounterUp = 43
+                isClimbUp = True
 
-        if hero_x > 170 and hero_x + hero_width < 280 and hero_y == 347:
-            # print_text("Wrong ladder", 200, 300)
-            ladderCounterUp = 63
-            isClimbUp = True
-        if hero_x > 170 and hero_x + hero_width < 280 and hero_y == 32:
-            ladderCounterDown = 63
-            isClimbDown = True
-        if hero_x > 1100 and hero_x + hero_width < 1300 and hero_y == 347:
-            print_text('Oh, shit', 1000, 275)
-            print_text('I need a keycard', 1000, 300)
-    pygame.display.update()
+            if hero_x > 490 and hero_x + hero_width < 600 and hero_y == 347:
+                ladderCounterDown = 43
+                isClimbDown = True
 
+            if hero_x > 170 and hero_x + hero_width < 280 and hero_y == 347:
+                # print_text("Wrong ladder", 200, 300)
+                ladderCounterUp = 63
+                isClimbUp = True
+            if hero_x > 170 and hero_x + hero_width < 280 and hero_y == 32:
+                ladderCounterDown = 63
+                isClimbDown = True
+            if hero_x > 1100 and hero_x + hero_width < 1300 and hero_y == 347:
+                print_text('Oh, shit', 1000, 275)
+                print_text('I need a keycard', 1000, 300)
+                start_combat = True
+        pygame.display.update()
+
+
+game_cycle()
 pygame.quit()
