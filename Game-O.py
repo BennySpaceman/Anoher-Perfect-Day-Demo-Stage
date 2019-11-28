@@ -10,7 +10,7 @@ speed = 5
 hero_x = 600
 hero_y = display_height - hero_height - 20
 badguy_x = 350
-badguy_y = display_height - 690
+badguy_y = display_height - 688
 
 Game_Name = 'Another perfect day'
 win = pygame.display.set_mode((display_width, display_height))
@@ -53,7 +53,8 @@ isRunning = False
 isJump = False
 isShooting = False
 isSitting = False
-isClimb = False
+isClimbUp = False
+isClimbDown = False
 combat_theme = False
 hero_action = False
 jumpCount = 10
@@ -64,6 +65,7 @@ facing = 1
 ladderCounterUp = 0
 ladderCounterDown = 0
 climbAnim = 0
+
 
 class Button:
     def __init__(self, width, height):
@@ -118,7 +120,7 @@ class BulletClass:
 
 def f_hero_stands_left():
     global smokeAnimCount
-    if not isClimb and not isSitting and not isShooting and not isJump and not isRunning and left:
+    if not isClimbUp and not isClimbDown and not isSitting and not isShooting and not isJump and not isRunning and left:
         win.blit(pygame.transform.scale(hero_stands_left[smokeAnimCount // 10],
                                         (hero_width, hero_height)), (hero_x, hero_y))
         smokeAnimCount += 1
@@ -126,7 +128,7 @@ def f_hero_stands_left():
 
 def f_hero_stands_right():
     global smokeAnimCount
-    if not isClimb and not isSitting and not isShooting and not isJump and not isRunning and right:
+    if not isClimbUp and not isClimbDown and not isSitting and not isShooting and not isJump and not isRunning and right:
         win.blit(pygame.transform.scale(hero_stands_right[smokeAnimCount // 10],
                                         (hero_width, hero_height)), (hero_x, hero_y))
         smokeAnimCount += 1
@@ -134,38 +136,38 @@ def f_hero_stands_right():
 
 def f_hero_run_left():
     global animCount
-    if not isSitting and not isShooting and not isJump and isRunning and left:
+    if not isClimbUp and not isClimbDown and not isSitting and not isShooting and not isJump and isRunning and left:
         win.blit(pygame.transform.scale(hero_run_left[animCount // 5], (hero_width, hero_height)), (hero_x, hero_y))
         animCount += 1
 
 
 def f_hero_run_right():
     global animCount
-    if not isSitting and not isShooting and not isJump and isRunning and right:
+    if not isClimbUp and not isClimbDown and not isSitting and not isShooting and not isJump and isRunning and right:
         win.blit(pygame.transform.scale(hero_run_right[animCount // 5], (hero_width, hero_height)), (hero_x, hero_y))
         animCount += 1
 
 
 def f_hero_jump_left():
-    if not isSitting and not isShooting and isJump and left:
+    if not isClimbUp and not isClimbDown and not isSitting and not isShooting and isJump and left:
         win.blit(pygame.transform.scale(pygame.image.load('Hero/Hero jump left.png'),
                                         (hero_width, hero_height)), (hero_x, hero_y))
 
 
 def f_hero_jump_right():
-    if not isSitting and not isShooting and isJump and right:
+    if not isClimbUp and not isClimbDown and not isSitting and not isShooting and isJump and right:
         win.blit(pygame.transform.scale(pygame.image.load('Hero/Hero jump right.png'),
                                         (hero_width, hero_height)), (hero_x, hero_y))
 
 
 def f_hero_shoot_left():
-    if not isSitting and isShooting and left:
+    if not isClimbUp and not isClimbDown and not isSitting and isShooting and left:
         win.blit(pygame.transform.scale(pygame.image.load('Hero/Hero shoot left.png'),
                                         (hero_width, hero_height)), (hero_x, hero_y))
 
 
 def f_hero_shoot_right():
-    if not isSitting and isShooting and right:
+    if not isClimbUp and not isClimbDown and not isSitting and isShooting and right:
         win.blit(pygame.transform.scale(pygame.image.load('Hero/Hero shoot right.png'),
                                         (hero_width, hero_height)), (hero_x, hero_y))
 
@@ -182,9 +184,17 @@ def f_hero_sit_right():
                                         (hero_width, hero_height)), (hero_x, hero_y))
 
 
-def draw_hero():
-    global isRunning, animCount, smokeAnimCount
+def f_hero_climb():
+    global climbAnim
+    if isClimbUp or isClimbDown:
+        win.blit(pygame.transform.scale(hero_climb[climbAnim // 7], (84, 147)), (hero_x, hero_y))
+        climbAnim += 1
 
+
+def draw_hero():
+    global isRunning, animCount, smokeAnimCount, climbAnim
+    if climbAnim + 1 >= 14:
+        climbAnim = 0
     if animCount + 1 >= 20:
         animCount = 0
     if smokeAnimCount + 1 >= 20:
@@ -200,33 +210,29 @@ def draw_hero():
     f_hero_shoot_right()
     f_hero_sit_left()
     f_hero_sit_right()
+    f_hero_climb()
     for i in bullets:
         i.draw(win)
 
 
 def ladder_climb():
-    global ladderCounterUp, ladderCounterDown, isClimb, hero_y, hero_x, climbAnim
-    if ladderCounterUp == 1:
-        hero_y = 347
-        ladderCounterUp = 0
+    global ladderCounterUp, ladderCounterDown, isClimbUp, isClimbDown, hero_y, hero_x, climbAnim
+    # if ladderCounterUp == 1:
+    #     hero_y = 347
+    #     ladderCounterUp = 0
     if ladderCounterUp > 0:
         hero_y -= 5
-        win.blit(pygame.transform.scale(hero_climb[climbAnim // 7], (84, 147)), (hero_x, hero_y))
         ladderCounterUp -= 1
-        climbAnim += 1
     if ladderCounterUp == 0:
-        isClimb = False
-    if ladderCounterDown == 1:
-        hero_y = 562
-        ladderCounterDown = 0
+        isClimbUp = False
+    # if ladderCounterDown == 1:
+    #     hero_y = 562
+    #     ladderCounterDown = 0
     if ladderCounterDown > 0:
         hero_y += 5
-        win.blit(pygame.transform.scale(hero_climb[climbAnim // 7], (84, 147)), (hero_x, hero_y))
         ladderCounterDown -= 1
     if ladderCounterDown == 0:
-        isClimb = False
-    if climbAnim + 1 > 14:
-        climbAnim = 0
+        isClimbDown = False
 
 
 def draw_badguy():
@@ -326,10 +332,9 @@ button = Button(100, 50)
 # show_menu()
 
 while game_running:
-    clock.tick(15)
+    clock.tick(60)
     key_events()
     music_change_check()
-
 
     for bullet in bullets:
         if display_width > bullet.bullet_x > 0:
@@ -340,7 +345,7 @@ while game_running:
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LSHIFT]:
         pause()
-    if not isSitting:
+    if not isSitting and not isClimbUp and not isClimbDown:
         if (keys[pygame.K_LEFT] and hero_x > 5) or (keys[pygame.K_a] and hero_x > 5):
             hero_x -= speed
             left = True
@@ -372,17 +377,19 @@ while game_running:
 
         if hero_x > 490 and hero_x + hero_width < 600 and hero_y == 562:
             ladderCounterUp = 43
-            isClimb = True
-            # print_text('Script works', 550, 500)
+            isClimbUp = True
 
         if hero_x > 490 and hero_x + hero_width < 600 and hero_y == 347:
             ladderCounterDown = 43
-            isClimb = True
-            # print_text('Script works', 550, 500)
+            isClimbDown = True
 
         if hero_x > 170 and hero_x + hero_width < 280 and hero_y == 347:
-            print_text("Wrong ladder", 200, 300)
-
+            # print_text("Wrong ladder", 200, 300)
+            ladderCounterUp = 63
+            isClimbUp = True
+        if hero_x > 170 and hero_x + hero_width < 280 and hero_y == 32:
+            ladderCounterDown = 63
+            isClimbDown = True
         if hero_x > 1100 and hero_x + hero_width < 1300 and hero_y == 347:
             print_text('Oh, shit', 1000, 275)
             print_text('I need a keycard', 1000, 300)
