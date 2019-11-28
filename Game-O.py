@@ -7,8 +7,9 @@ display_height = 720
 hero_width = 84
 hero_height = 138
 speed = 5
-hero_x = 600
-hero_y = display_height - hero_height - 20
+hero_x = 1000
+# hero_y = display_height - hero_height - 20
+hero_y = 347
 badguy_x = 350
 badguy_y = display_height - 688
 
@@ -16,9 +17,21 @@ Game_Name = 'Another perfect day'
 win = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_icon(pygame.image.load('Game icon.png'))
 pygame.display.set_caption(Game_Name)
+badguy_climb = [pygame.image.load('Bad guy/First/Bad guy climb 1.png'),
+                pygame.image.load('Bad guy/First/Bad guy climb 2.png')]
 
-badguy_stand_right = [pygame.image.load('Bad guy/Bad guy smoke 1.png'),
-                      pygame.image.load('Bad guy/Bad guy smoke 2.png')]
+badguy_stand_right = [pygame.image.load('Bad guy/First/Bad guy smoke 1.png'),
+                      pygame.image.load('Bad guy/First/Bad guy smoke 2.png')]
+
+badguy_run_left = [pygame.image.load('Bad guy/First/Bad guy run left(1).png'),
+                   pygame.image.load('Bad guy/First/Bad guy run left(2).png'),
+                   pygame.image.load('Bad guy/First/Bad guy run left(3).png'),
+                   pygame.image.load('Bad guy/First/Bad guy run left(4).png')]
+
+badguy_run_right = [pygame.image.load('Bad guy/First/Bad guy run right(1).png'),
+                    pygame.image.load('Bad guy/First/Bad guy run right(2).png'),
+                    pygame.image.load('Bad guy/First/Bad guy run right(3).png'),
+                    pygame.image.load('Bad guy/First/Bad guy run right(4).png')]
 
 hero_run_right = [pygame.image.load('Hero/Hero run right(1).png'),
                   pygame.image.load('Hero/Hero run right(2).png'),
@@ -61,11 +74,14 @@ start_combat = False
 jumpCount = 10
 animCount = 0
 smokeAnimCountBadGuy = 0
+badguyLadderCount = 0
 smokeAnimCount = 0
 facing = 1
 ladderCounterUp = 0
 ladderCounterDown = 0
 climbAnim = 0
+start_combat_timer = 0
+badguyAnimCount = 0
 
 
 class Button:
@@ -75,7 +91,7 @@ class Button:
         self.inactive_clr = (13, 162, 58)
         self.active_clr = (23, 204, 58)
 
-    def draw(self, x, y, message, action=None):
+    def draw(self, x, y, message):
         mouse = pygame.mouse.get_pos()
 
         if x < mouse[0] < x + self.width:
@@ -100,25 +116,6 @@ class BulletClass:
                           (self.bullet_x, self.bullet_y))
 
 
-# def show_menu():
-#     menu_background = pygame.image.load('In-game Menu.png')
-#     show = True
-#
-#     play_demo_button = Button(300, 70)
-#
-#     while show:
-#         for event in pygame.event.get():
-#             if event.type == pygame.QUIT:
-#                 pygame.quit()
-#                 quit()
-#
-#         win.blit(menu_background, (0, 0))
-#         play_demo_button.draw(300, 300, '', None, 50)
-#
-#         pygame.display.update()
-#         clock.tick(60)
-
-
 def f_hero_stands_left():
     global smokeAnimCount
     if not isClimbUp and not isClimbDown and not isSitting and not isShooting and not isJump and not isRunning and left:
@@ -129,7 +126,8 @@ def f_hero_stands_left():
 
 def f_hero_stands_right():
     global smokeAnimCount
-    if not isClimbUp and not isClimbDown and not isSitting and not isShooting and not isJump and not isRunning and right:
+    if not isClimbUp and not isClimbDown and not isSitting and \
+            not isShooting and not isJump and not isRunning and right:
         win.blit(pygame.transform.scale(hero_stands_right[smokeAnimCount // 10],
                                         (hero_width, hero_height)), (hero_x, hero_y))
         smokeAnimCount += 1
@@ -188,13 +186,13 @@ def f_hero_sit_right():
 def f_hero_climb():
     global climbAnim
     if isClimbUp or isClimbDown:
-        win.blit(pygame.transform.scale(hero_climb[climbAnim // 7], (84, 147)), (hero_x, hero_y))
+        win.blit(pygame.transform.scale(hero_climb[climbAnim // 10], (84, 147)), (hero_x, hero_y))
         climbAnim += 1
 
 
 def draw_hero():
     global isRunning, animCount, smokeAnimCount, climbAnim
-    if climbAnim + 1 >= 14:
+    if climbAnim + 1 >= 20:
         climbAnim = 0
     if animCount + 1 >= 20:
         animCount = 0
@@ -218,17 +216,11 @@ def draw_hero():
 
 def ladder_climb():
     global ladderCounterUp, ladderCounterDown, isClimbUp, isClimbDown, hero_y, hero_x, climbAnim
-    # if ladderCounterUp == 1:
-    #     hero_y = 347
-    #     ladderCounterUp = 0
     if ladderCounterUp > 0:
         hero_y -= 5
         ladderCounterUp -= 1
     if ladderCounterUp == 0:
         isClimbUp = False
-    # if ladderCounterDown == 1:
-    #     hero_y = 562
-    #     ladderCounterDown = 0
     if ladderCounterDown > 0:
         hero_y += 5
         ladderCounterDown -= 1
@@ -238,10 +230,15 @@ def ladder_climb():
 
 def draw_badguy():
     global smokeAnimCountBadGuy
-    if smokeAnimCountBadGuy + 1 >= 120:
+    if not start_combat:
+        win.blit(pygame.transform.scale(badguy_stand_right[smokeAnimCountBadGuy // 60], (84, 138)),
+                 (badguy_x, badguy_y))
+        smokeAnimCountBadGuy += 1
+    if smokeAnimCountBadGuy + 1 > 120:
         smokeAnimCountBadGuy = 0
-    win.blit(pygame.transform.scale(badguy_stand_right[smokeAnimCountBadGuy // 60], (84, 138)), (badguy_x, badguy_y))
-    smokeAnimCountBadGuy += 1
+    # win.blit(pygame.transform.scale(badguy_stand_right[smokeAnimCountBadGuy // 60], (84, 138)),
+    #          (badguy_x, badguy_y))
+    # smokeAnimCountBadGuy += 1
 
 
 def jump():
@@ -327,18 +324,52 @@ def music_change_check():
         combat_theme = False
 
 
-# def second_part():
-#     if start_combat:
-#
+def second_part():
+    global start_combat_timer, badguy_x,badguy_y, start_combat, badguyLadderCount, badguyAnimCount
+    if start_combat:
+        if 351 > start_combat_timer > 320:
+            print_text('1st part of script', 0, 200, font_size=40, font_color=(0, 0, 0))
+            win.blit(pygame.transform.scale(pygame.image.load('Bad guy/First/Bad guy transmitter(1).png'), (84, 138)),
+                     (badguy_x, badguy_y))
+            start_combat_timer -= 1
+        if 321 > start_combat_timer > 240:
+            print_text('2nd part of script', 0, 200, font_size=40, font_color=(0, 0, 0))
+            win.blit(pygame.transform.scale(pygame.image.load('Bad guy/First/Bad guy transmitter(2).png'), (84, 138)),
+                     (badguy_x, badguy_y))
+            start_combat_timer -= 1
+        if 241 > start_combat_timer > 184:
+            print_text('3rd part of script', 0, 200, font_size=40, font_color=(0, 0, 0))
+            badguy_x -= 3
+            win.blit(pygame.transform.scale(badguy_run_left[badguyAnimCount // 5], (84, 138)), (badguy_x, badguy_y))
+            badguyAnimCount += 1
+            if badguyAnimCount + 1 > 20:
+                badguyAnimCount = 0
+            start_combat_timer -= 1
+            pygame.draw.rect(win, (0, 0, 0), (1080, 525, 70, 140))
+        if 185 > start_combat_timer > 121:
+            print_text('4th part of script', 0, 200, font_size=40, font_color=(0, 0, 0))
+            badguy_y += 5
+            win.blit(pygame.transform.scale(badguy_climb[badguyLadderCount // 10], (84, 138)), (badguy_x, badguy_y))
+            badguyLadderCount += 1
+            if badguyLadderCount + 1 > 20:
+                badguyLadderCount = 0
+            start_combat_timer -= 1
+            pygame.draw.rect(win, (0, 0, 0), (1080, 525, 70, 140))
+        if 122 > start_combat_timer > 60:
+            pass
+        if 61 > start_combat_timer > 0:
+            pass
+        if start_combat_timer == 0:
+            pass
+
 
 bullets = []
 button = Button(100, 50)
 
-# show_menu()
-
 
 def game_cycle():
-    global isClimbUp, isClimbDown, hero_x, hero_y, left, right, isRunning, isJump, ladderCounterUp, ladderCounterDown, start_combat
+    global isClimbUp, isClimbDown, hero_x, hero_y, left, right, isRunning, isJump, ladderCounterUp, ladderCounterDown,\
+        start_combat, start_combat_timer
     while game_running:
         clock.tick(60)
         key_events()
@@ -376,6 +407,7 @@ def game_cycle():
         draw_hero()
         ladder_climb()
         draw_badguy()
+        second_part()
         if hero_action:
             if hero_x > 1050 and hero_x + hero_width < 1200 and hero_y == 562:
                 # button.draw(1000, 500, "I'd better not enter this door")
@@ -402,6 +434,7 @@ def game_cycle():
                 print_text('Oh, shit', 1000, 275)
                 print_text('I need a keycard', 1000, 300)
                 start_combat = True
+                start_combat_timer = 350
         pygame.display.update()
 
 
