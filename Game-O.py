@@ -8,30 +8,44 @@ hero_width = 84
 hero_height = 138
 speed = 5
 hero_x = 1000
-# hero_y = display_height - hero_height - 20
 hero_y = 347
-badguy_x = 350
-badguy_y = display_height - 688
+first_badguy_x = 350
+first_badguy_y = display_height - 688
+second_badguy_x = 1070
+second_badguy_y = 562
+third_badguy_x = 1070
+third_badguy_y = 562
 
 Game_Name = 'Another perfect day'
 win = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_icon(pygame.image.load('Game icon.png'))
 pygame.display.set_caption(Game_Name)
-badguy_climb = [pygame.image.load('Bad guy/First/Bad guy climb 1.png'),
-                pygame.image.load('Bad guy/First/Bad guy climb 2.png')]
 
-badguy_stand_right = [pygame.image.load('Bad guy/First/Bad guy smoke 1.png'),
-                      pygame.image.load('Bad guy/First/Bad guy smoke 2.png')]
+first_badguy_climb = [pygame.image.load('Bad guy/First/Bad guy climb 1.png'),
+                      pygame.image.load('Bad guy/First/Bad guy climb 2.png')]
 
-badguy_run_left = [pygame.image.load('Bad guy/First/Bad guy run left(1).png'),
-                   pygame.image.load('Bad guy/First/Bad guy run left(2).png'),
-                   pygame.image.load('Bad guy/First/Bad guy run left(3).png'),
-                   pygame.image.load('Bad guy/First/Bad guy run left(4).png')]
+first_badguy_stand_right = [pygame.image.load('Bad guy/First/Bad guy smoke 1.png'),
+                            pygame.image.load('Bad guy/First/Bad guy smoke 2.png')]
 
-badguy_run_right = [pygame.image.load('Bad guy/First/Bad guy run right(1).png'),
-                    pygame.image.load('Bad guy/First/Bad guy run right(2).png'),
-                    pygame.image.load('Bad guy/First/Bad guy run right(3).png'),
-                    pygame.image.load('Bad guy/First/Bad guy run right(4).png')]
+first_badguy_run_left = [pygame.image.load('Bad guy/First/Bad guy run left(1).png'),
+                         pygame.image.load('Bad guy/First/Bad guy run left(2).png'),
+                         pygame.image.load('Bad guy/First/Bad guy run left(3).png'),
+                         pygame.image.load('Bad guy/First/Bad guy run left(4).png')]
+
+first_badguy_run_right = [pygame.image.load('Bad guy/First/Bad guy run right(1).png'),
+                          pygame.image.load('Bad guy/First/Bad guy run right(2).png'),
+                          pygame.image.load('Bad guy/First/Bad guy run right(3).png'),
+                          pygame.image.load('Bad guy/First/Bad guy run right(4).png')]
+
+second_badguy_run_left = [pygame.image.load('Bad guy/Second/Second bad guy run left(1).png'),
+                          pygame.image.load('Bad guy/Second/Second bad guy run left(2).png'),
+                          pygame.image.load('Bad guy/Second/Second bad guy run left(3).png'),
+                          pygame.image.load('Bad guy/Second/Second bad guy run left(4).png')]
+
+third_badguy_run_left = [pygame.image.load('Bad guy/Third/Third bad guy run left (1).png'),
+                         pygame.image.load('Bad guy/Third/Third bad guy run left (2).png'),
+                         pygame.image.load('Bad guy/Third/Third bad guy run left (3).png'),
+                         pygame.image.load('Bad guy/Third/Third bad guy run left (4).png')]
 
 hero_run_right = [pygame.image.load('Hero/Hero run right(1).png'),
                   pygame.image.load('Hero/Hero run right(2).png'),
@@ -71,6 +85,8 @@ isClimbDown = False
 combat_theme = False
 hero_action = False
 start_combat = False
+door_allow = False
+part_two_is_running = False
 jumpCount = 10
 animCount = 0
 smokeAnimCountBadGuy = 0
@@ -81,7 +97,9 @@ ladderCounterUp = 0
 ladderCounterDown = 0
 climbAnim = 0
 start_combat_timer = 0
-badguyAnimCount = 0
+first_badguy_animCount = 0
+second_badguy_animCount = 0
+third_badguy_animCount = 0
 
 
 class Button:
@@ -228,17 +246,21 @@ def ladder_climb():
         isClimbDown = False
 
 
-def draw_badguy():
+def draw_badguys():
     global smokeAnimCountBadGuy
-    if not start_combat:
-        win.blit(pygame.transform.scale(badguy_stand_right[smokeAnimCountBadGuy // 60], (84, 138)),
-                 (badguy_x, badguy_y))
+    if not start_combat and not part_two_is_running:
+        win.blit(pygame.transform.scale(first_badguy_stand_right[smokeAnimCountBadGuy // 60], (84, 138)),
+                 (first_badguy_x, first_badguy_y))
         smokeAnimCountBadGuy += 1
     if smokeAnimCountBadGuy + 1 > 120:
         smokeAnimCountBadGuy = 0
-    # win.blit(pygame.transform.scale(badguy_stand_right[smokeAnimCountBadGuy // 60], (84, 138)),
-    #          (badguy_x, badguy_y))
-    # smokeAnimCountBadGuy += 1
+    if part_two_is_running:
+        win.blit(pygame.transform.scale(pygame.image.load('Bad guy/First/Bad guy shoot right.png'),
+                                        (84, 138)), (first_badguy_x, first_badguy_y))
+        win.blit(pygame.transform.scale(pygame.image.load('Bad guy/Second/Second bad guy shoot right.png'),
+                                        (84, 138)), (second_badguy_x, second_badguy_y))
+        win.blit(pygame.transform.scale(pygame.image.load('Bad guy/Third/Third bad guy shoot left.png'),
+                                        (84, 138)), (third_badguy_x, third_badguy_y))
 
 
 def jump():
@@ -325,61 +347,127 @@ def music_change_check():
 
 
 def second_part():
-    global start_combat_timer, badguy_x, badguy_y, start_combat, badguyLadderCount, badguyAnimCount
+    global start_combat_timer, first_badguy_x, first_badguy_y, start_combat, badguyLadderCount, \
+        first_badguy_animCount, second_badguy_animCount, second_badguy_x, third_badguy_x, \
+        third_badguy_animCount, part_two_is_running
     if start_combat:
         if 351 > start_combat_timer > 320:
-            print_text('1st part of script', 0, 200, font_size=40, font_color=(0, 0, 0))
-            win.blit(pygame.transform.scale(pygame.image.load('Bad guy/First/Bad guy transmitter(1).png'), (84, 138)),
-                     (badguy_x, badguy_y))
+            print_text('1', 0, 200, font_size=60, font_color=(0, 0, 0))
+            win.blit(pygame.transform.scale(pygame.image.load('Bad guy/First/Bad guy transmitter(1).png'),
+                                            (84, 138)), (first_badguy_x, first_badguy_y))
             start_combat_timer -= 1
         if 321 > start_combat_timer > 240:
-            print_text('2nd part of script', 0, 200, font_size=40, font_color=(0, 0, 0))
-            win.blit(pygame.transform.scale(pygame.image.load('Bad guy/First/Bad guy transmitter(2).png'), (84, 138)),
-                     (badguy_x, badguy_y))
+            print_text('2', 0, 200, font_size=60, font_color=(0, 0, 0))
+            win.blit(pygame.transform.scale(pygame.image.load('Bad guy/First/Bad guy transmitter(2).png'),
+                                            (84, 138)), (first_badguy_x, first_badguy_y))
             start_combat_timer -= 1
         if 241 > start_combat_timer > 204:
-            print_text('3rd part of script', 0, 200, font_size=40, font_color=(0, 0, 0))
-            badguy_x -= 3
-            win.blit(pygame.transform.scale(badguy_run_left[badguyAnimCount // 5], (84, 138)), (badguy_x, badguy_y))
-            badguyAnimCount += 1
-            if badguyAnimCount + 1 > 20:
-                badguyAnimCount = 0
+            print_text('3', 0, 200, font_size=60, font_color=(0, 0, 0))
+            first_badguy_x -= 3
+            win.blit(pygame.transform.scale(first_badguy_run_left[first_badguy_animCount // 5],
+                                            (84, 138)), (first_badguy_x, first_badguy_y))
+            first_badguy_animCount += 1
+            if first_badguy_animCount + 1 > 20:
+                first_badguy_animCount = 0
             start_combat_timer -= 1
             pygame.draw.rect(win, (0, 0, 0), (1080, 525, 70, 140))
         if 205 > start_combat_timer > 184:
-            print_text('4th part of script', 0, 200, font_size=40, font_color=(0, 0, 0))
-            badguy_x -= 3
-            win.blit(pygame.transform.scale(badguy_run_left[badguyAnimCount // 5], (84, 138)), (badguy_x, badguy_y))
-            badguyAnimCount += 1
-            if badguyAnimCount + 1 > 20:
-                badguyAnimCount = 0
+            print_text('4', 0, 200, font_size=60, font_color=(0, 0, 0))
+            first_badguy_x -= 3
+            win.blit(pygame.transform.scale(first_badguy_run_left[first_badguy_animCount // 5],
+                                            (84, 138)), (first_badguy_x, first_badguy_y))
+            first_badguy_animCount += 1
+            if first_badguy_animCount + 1 > 20:
+                first_badguy_animCount = 0
             start_combat_timer -= 1
             pygame.draw.rect(win, (0, 0, 0), (1080, 525, 70, 140))
-            win.blit(pygame.transform.scale(pygame.image.load('Bad guy/Second/Second bad guy left.png'), (84, 138)),
-                     (1070, 562))
-        # if 185 > start_combat_timer > 121:
-        #     print_text('4th part of script', 0, 200, font_size=40, font_color=(0, 0, 0))
-        #     badguy_y += 5
-        #     win.blit(pygame.transform.scale(badguy_climb[badguyLadderCount // 10], (84, 138)), (badguy_x, badguy_y))
-        #     badguyLadderCount += 1
-        #     if badguyLadderCount + 1 > 20:
-        #         badguyLadderCount = 0
-        #     start_combat_timer -= 1
-        #     pygame.draw.rect(win, (0, 0, 0), (1080, 525, 70, 140))
-        # if 122 > start_combat_timer > 60:
-        #
-        # if 61 > start_combat_timer > 0:
-        #     pass
-        # if start_combat_timer == 0:
-        #     pass
+            win.blit(pygame.transform.scale(pygame.image.load('Bad guy/Second/Second bad guy left.png'),
+                                            (84, 138)), (second_badguy_x, second_badguy_y))
+        if 185 > start_combat_timer > 151:
+            print_text('5', 0, 200, font_size=60, font_color=(0, 0, 0))
+            first_badguy_y += 5
+            second_badguy_x -= 5
+            win.blit(pygame.transform.scale(first_badguy_climb[badguyLadderCount // 10],
+                                            (84, 138)), (first_badguy_x, first_badguy_y))
+            badguyLadderCount += 1
+            if badguyLadderCount + 1 > 20:
+                badguyLadderCount = 0
+            pygame.draw.rect(win, (0, 0, 0), (1080, 525, 70, 140))
+            win.blit(pygame.transform.scale(second_badguy_run_left[second_badguy_animCount // 5],
+                                            (84, 138)), (second_badguy_x, second_badguy_y))
+            second_badguy_animCount += 1
+            if second_badguy_animCount + 1 > 20:
+                second_badguy_animCount = 0
+            start_combat_timer -= 1
+        if 152 > start_combat_timer > 121:
+            print_text('6', 0, 200, font_size=60, font_color=(0, 0, 0))
+            first_badguy_y += 5
+            second_badguy_x -= 5
+            win.blit(pygame.transform.scale(first_badguy_climb[badguyLadderCount // 10],
+                                            (84, 138)), (first_badguy_x, first_badguy_y))
+            badguyLadderCount += 1
+            if badguyLadderCount + 1 > 20:
+                badguyLadderCount = 0
+            pygame.draw.rect(win, (0, 0, 0), (1080, 525, 70, 140))
+            win.blit(pygame.transform.scale(second_badguy_run_left[second_badguy_animCount // 5],
+                                            (84, 138)), (second_badguy_x, second_badguy_y))
+            second_badguy_animCount += 1
+            if second_badguy_animCount + 1 > 20:
+                second_badguy_animCount = 0
+            win.blit(pygame.transform.scale(pygame.image.load('Bad guy/Third/Third bad guy left.png'),
+                                            (84, 138)), (third_badguy_x, third_badguy_y))
+            start_combat_timer -= 1
+        if 122 > start_combat_timer > 60:
+            print_text('7', 0, 200, font_size=60, font_color=(0, 0, 0))
+            first_badguy_x += 5
+            second_badguy_x -= 5
+            third_badguy_x -= 5
+            win.blit(pygame.transform.scale(first_badguy_run_right[first_badguy_animCount // 5],
+                                            (84, 138)), (first_badguy_x, first_badguy_y))
+            first_badguy_animCount += 1
+            if first_badguy_animCount + 1 > 20:
+                first_badguy_animCount = 0
+            win.blit(pygame.transform.scale(second_badguy_run_left[second_badguy_animCount // 5],
+                                            (84, 138)), (second_badguy_x, second_badguy_y))
+            second_badguy_animCount += 1
+            if second_badguy_animCount + 1 > 20:
+                second_badguy_animCount = 0
+            win.blit(pygame.transform.scale(third_badguy_run_left[third_badguy_animCount // 5],
+                                            (84, 138)), (third_badguy_x, third_badguy_y))
+            third_badguy_animCount += 1
+            if third_badguy_animCount + 1 > 20:
+                third_badguy_animCount = 0
+            start_combat_timer -= 1
+        if 61 > start_combat_timer > 0:
+            print_text('8', 0, 200, font_size=60, font_color=(0, 0, 0))
+            second_badguy_x -= 5
+            win.blit(pygame.transform.scale(pygame.image.load('Bad guy/First/Bad guy shoot right.png'),
+                                            (84, 138)), (first_badguy_x, first_badguy_y))
+            win.blit(pygame.transform.scale(second_badguy_run_left[second_badguy_animCount // 5], (84, 138)),
+                     (second_badguy_x, second_badguy_y))
+            second_badguy_animCount += 1
+            if second_badguy_animCount + 1 > 20:
+                second_badguy_animCount = 0
+            win.blit(pygame.transform.scale(pygame.image.load('Bad guy/Third/Third bad guy shoot left.png'),
+                                            (84, 138)), (third_badguy_x, third_badguy_y))
+            start_combat_timer -= 1
+        if start_combat_timer == 0:
+            print_text('9', 0, 200, font_size=60, font_color=(0, 0, 0))
+            win.blit(pygame.transform.scale(pygame.image.load('Bad guy/First/Bad guy shoot right.png'),
+                                            (84, 138)), (first_badguy_x, first_badguy_y))
+            win.blit(pygame.transform.scale(pygame.image.load('Bad guy/Second/Second bad guy shoot right.png'),
+                                            (84, 138)), (second_badguy_x, second_badguy_y))
+            win.blit(pygame.transform.scale(pygame.image.load('Bad guy/Third/Third bad guy shoot left.png'),
+                                            (84, 138)), (third_badguy_x, third_badguy_y))
+            start_combat = False
+            part_two_is_running = True
 
 
 bullets = []
-button = Button(100, 50)
 
 
 def game_cycle():
-    global isClimbUp, isClimbDown, hero_x, hero_y, left, right, isRunning, isJump, ladderCounterUp, ladderCounterDown,\
+    global isClimbUp, isClimbDown, hero_x, hero_y, left, right, isRunning, isJump, ladderCounterUp, ladderCounterDown, \
         start_combat, start_combat_timer
     while game_running:
         clock.tick(60)
@@ -417,11 +505,10 @@ def game_cycle():
         print_text(str(hero_y), 0, 30)
         draw_hero()
         ladder_climb()
-        draw_badguy()
+        draw_badguys()
         second_part()
         if hero_action:
             if hero_x > 1050 and hero_x + hero_width < 1200 and hero_y == 562:
-                # button.draw(1000, 500, "I'd better not enter this door")
                 pygame.draw.rect(win, (0, 0, 0), (800, 465, 430, 80))
                 print_text("It's guard room", 820, 470)
                 print_text("I'd better not to enter this door", 820, 500)
@@ -435,7 +522,6 @@ def game_cycle():
                 isClimbDown = True
 
             if hero_x > 170 and hero_x + hero_width < 280 and hero_y == 347:
-                # print_text("Wrong ladder", 200, 300)
                 ladderCounterUp = 63
                 isClimbUp = True
             if hero_x > 170 and hero_x + hero_width < 280 and hero_y == 32:
@@ -444,8 +530,9 @@ def game_cycle():
             if hero_x > 1100 and hero_x + hero_width < 1300 and hero_y == 347:
                 print_text('Oh, shit', 1000, 275)
                 print_text('I need a keycard', 1000, 300)
-                start_combat = True
-                start_combat_timer = 350
+                if not door_allow:
+                    start_combat = True
+                    start_combat_timer = 350
         pygame.display.update()
 
 
