@@ -325,7 +325,7 @@ def music_change_check():
 
 
 def second_part():
-    global start_combat_timer, badguy_x,badguy_y, start_combat, badguyLadderCount, badguyAnimCount
+    global start_combat_timer, badguy_x, badguy_y, start_combat, badguyLadderCount, badguyAnimCount
     if start_combat:
         if 351 > start_combat_timer > 320:
             print_text('1st part of script', 0, 200, font_size=40, font_color=(0, 0, 0))
@@ -337,7 +337,7 @@ def second_part():
             win.blit(pygame.transform.scale(pygame.image.load('Bad guy/First/Bad guy transmitter(2).png'), (84, 138)),
                      (badguy_x, badguy_y))
             start_combat_timer -= 1
-        if 241 > start_combat_timer > 184:
+        if 241 > start_combat_timer > 204:
             print_text('3rd part of script', 0, 200, font_size=40, font_color=(0, 0, 0))
             badguy_x -= 3
             win.blit(pygame.transform.scale(badguy_run_left[badguyAnimCount // 5], (84, 138)), (badguy_x, badguy_y))
@@ -346,21 +346,32 @@ def second_part():
                 badguyAnimCount = 0
             start_combat_timer -= 1
             pygame.draw.rect(win, (0, 0, 0), (1080, 525, 70, 140))
-        if 185 > start_combat_timer > 121:
+        if 205 > start_combat_timer > 184:
             print_text('4th part of script', 0, 200, font_size=40, font_color=(0, 0, 0))
-            badguy_y += 5
-            win.blit(pygame.transform.scale(badguy_climb[badguyLadderCount // 10], (84, 138)), (badguy_x, badguy_y))
-            badguyLadderCount += 1
-            if badguyLadderCount + 1 > 20:
-                badguyLadderCount = 0
+            badguy_x -= 3
+            win.blit(pygame.transform.scale(badguy_run_left[badguyAnimCount // 5], (84, 138)), (badguy_x, badguy_y))
+            badguyAnimCount += 1
+            if badguyAnimCount + 1 > 20:
+                badguyAnimCount = 0
             start_combat_timer -= 1
             pygame.draw.rect(win, (0, 0, 0), (1080, 525, 70, 140))
-        if 122 > start_combat_timer > 60:
-            pass
-        if 61 > start_combat_timer > 0:
-            pass
-        if start_combat_timer == 0:
-            pass
+            win.blit(pygame.transform.scale(pygame.image.load('Bad guy/Second/Second bad guy left.png'), (84, 138)),
+                     (1070, 562))
+        # if 185 > start_combat_timer > 121:
+        #     print_text('4th part of script', 0, 200, font_size=40, font_color=(0, 0, 0))
+        #     badguy_y += 5
+        #     win.blit(pygame.transform.scale(badguy_climb[badguyLadderCount // 10], (84, 138)), (badguy_x, badguy_y))
+        #     badguyLadderCount += 1
+        #     if badguyLadderCount + 1 > 20:
+        #         badguyLadderCount = 0
+        #     start_combat_timer -= 1
+        #     pygame.draw.rect(win, (0, 0, 0), (1080, 525, 70, 140))
+        # if 122 > start_combat_timer > 60:
+        #
+        # if 61 > start_combat_timer > 0:
+        #     pass
+        # if start_combat_timer == 0:
+        #     pass
 
 
 bullets = []

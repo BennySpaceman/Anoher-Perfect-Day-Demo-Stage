@@ -2,53 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1d4a3853-3687-4e05-98b9-ebe37968c3c0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/Danila.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Bad guy climb 1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Bad guy climb 2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Bad guy run left(1).png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Bad guy run left(2).png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Bad guy run left(3).png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Bad guy run left(4).png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Bad guy run right(1).png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Bad guy run right(2).png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Bad guy run right(3).png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Bad guy run right(4).png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Bad guy shoot left.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Bad guy shoot right.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Bad guy smoke 1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Bad guy smoke 2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Bad guy stand left.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Bad guy stand right.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Bad guy transmitter(1).png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Bad guy transmitter(2).png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Second bad guy left.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Second bad guy run left(1).png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Second bad guy run left(2).png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Second bad guy run left(3).png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Second bad guy run left(4).png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Second bad guy run right(1).png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Second bad guy run right(2).png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Second bad guy run right(3).png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Second bad guy run right(4).png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Second bad guy shoot left.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Second bad guy shoot.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Second bad guy.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Third bad guy left.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Third bad guy run (1).png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Third bad guy run (2).png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Third bad guy run (3).png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Third bad guy run (4).png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Third bad guy run left (1).png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Third bad guy run left (4).png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Third bad guy run left(2).png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Third bad guy run left(3).png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Third bad guy shoot left.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Third bad guy shoot.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bad guy/Third bad guy.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Game-O.py" beforeDir="false" afterPath="$PROJECT_DIR$/Game-O.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Hero/Hero climb (1).png" beforeDir="false" afterPath="$PROJECT_DIR$/Hero/Hero climb (1).png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Hero/Hero climb (2).png" beforeDir="false" afterPath="$PROJECT_DIR$/Hero/Hero climb (2).png" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
