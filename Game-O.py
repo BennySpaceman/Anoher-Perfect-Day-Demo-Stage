@@ -292,10 +292,8 @@ def key_events():
                 if left:
                     facing = -1
                 bullets.append(BulletClass(round(hero_x + hero_width // 2), round(hero_y + hero_height - 92), facing))
-            if event.key == pygame.K_DOWN or event.key == pygame.K_s:
+            if (event.key == pygame.K_DOWN or event.key == pygame.K_s) and not isJump:
                 isSitting = True
-            if event.key == pygame.K_t:
-                combat_theme = True
             if event.key == pygame.K_f:
                 hero_action = True
 
@@ -340,7 +338,7 @@ def music_change_check():
     global combat_theme
     if combat_theme:
         pygame.mixer.music.stop()
-        pygame.mixer.music.load('Main theme.mp3')
+        pygame.mixer.music.load('Combat theme.mp3')
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(0.25)
         combat_theme = False
@@ -349,7 +347,7 @@ def music_change_check():
 def second_part():
     global start_combat_timer, first_badguy_x, first_badguy_y, start_combat, badguyLadderCount, \
         first_badguy_animCount, second_badguy_animCount, second_badguy_x, third_badguy_x, \
-        third_badguy_animCount, part_two_is_running
+        third_badguy_animCount, part_two_is_running, combat_theme, door_allow
     if start_combat:
         if 351 > start_combat_timer > 320:
             print_text('1', 0, 200, font_size=60, font_color=(0, 0, 0))
@@ -461,6 +459,7 @@ def second_part():
                                             (84, 138)), (third_badguy_x, third_badguy_y))
             start_combat = False
             part_two_is_running = True
+            door_allow = True
 
 
 bullets = []
@@ -468,7 +467,7 @@ bullets = []
 
 def game_cycle():
     global isClimbUp, isClimbDown, hero_x, hero_y, left, right, isRunning, isJump, ladderCounterUp, ladderCounterDown, \
-        start_combat, start_combat_timer
+        start_combat, start_combat_timer, combat_theme
     while game_running:
         clock.tick(60)
         key_events()
@@ -533,6 +532,7 @@ def game_cycle():
                 if not door_allow:
                     start_combat = True
                     start_combat_timer = 350
+                    combat_theme = True
         pygame.display.update()
 
 
