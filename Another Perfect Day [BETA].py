@@ -299,7 +299,10 @@ def draw_badguys():
                                             (84, 138)), (third_badguy_x, third_badguy_y))
         if first_badguy_is_dead:
             win.blit(pygame.transform.scale(pygame.image.load('Bad guy/First/Bad dead right.png'),
-                                            (171, 147)), (first_badguy_x - 150, first_badguy_y + 3))
+                                            (171, 138)), (first_badguy_x - 130, first_badguy_y + 12))
+        if second_badguy_is_dead:
+            win.blit(pygame.transform.scale(pygame.image.load('Bad guy/Second/Second bad guy dead.png'),
+                                            (138, 138)), (second_badguy_x - 130, second_badguy_y + 12))
 
 
 def jump():
@@ -715,7 +718,7 @@ def game_cycle():
         if keys[pygame.K_ESCAPE]:
             pause()
 
-        if not isSitting and not isClimbUp and not isClimbDown:
+        if not isSitting and not isClimbUp and not isClimbDown and not isShooting:
             if (keys[pygame.K_LEFT] and hero_x > 5) or (keys[pygame.K_a] and hero_x > 5):
                 hero_x -= speed
                 left = True
