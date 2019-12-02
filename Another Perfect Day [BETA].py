@@ -92,6 +92,9 @@ hero_action = False
 start_combat = False
 door_allow = False
 part_two_is_running = False
+first_badguy_is_dead = False
+second_badguy_is_dead = False
+third_badguy_is_dead = False
 jumpCount = 10
 animCount = 0
 smokeAnimCountBadGuy = 0
@@ -283,12 +286,15 @@ def draw_badguys():
         smokeAnimCountBadGuy = 0
 
     if part_two_is_running:
-        win.blit(pygame.transform.scale(pygame.image.load('Bad guy/First/Bad guy shoot right.png'),
-                                        (84, 138)), (first_badguy_x, first_badguy_y))
-        win.blit(pygame.transform.scale(pygame.image.load('Bad guy/Second/Second bad guy shoot right.png'),
-                                        (84, 138)), (second_badguy_x, second_badguy_y))
-        win.blit(pygame.transform.scale(pygame.image.load('Bad guy/Third/Third bad guy shoot left.png'),
-                                        (84, 138)), (third_badguy_x, third_badguy_y))
+        if not first_badguy_is_dead:
+            win.blit(pygame.transform.scale(pygame.image.load('Bad guy/First/Bad guy shoot right.png'),
+                                            (84, 138)), (first_badguy_x, first_badguy_y))
+        if not second_badguy_is_dead:
+            win.blit(pygame.transform.scale(pygame.image.load('Bad guy/Second/Second bad guy shoot right.png'),
+                                            (84, 138)), (second_badguy_x, second_badguy_y))
+        if not third_badguy_is_dead:
+            win.blit(pygame.transform.scale(pygame.image.load('Bad guy/Third/Third bad guy shoot left.png'),
+                                            (84, 138)), (third_badguy_x, third_badguy_y))
 
 
 def jump():
@@ -433,21 +439,27 @@ def show_menu():
 
 
 def check_bullet_hit():
-    global bullets
+    global bullets, first_badguy_is_dead, second_badguy_is_dead, third_badguy_is_dead
     for bullet in bullets:
-        if first_badguy_x + 40 > bullet.bullet_x > first_badguy_x:
-            if first_badguy_y + 138 > bullet.bullet_y > first_badguy_y:
+        if not first_badguy_is_dead:
+            if first_badguy_x + 40 > bullet.bullet_x > first_badguy_x and \
+                    first_badguy_y + 138 > bullet.bullet_y > first_badguy_y:
                 bullets.pop(bullets.index(bullet))
+                first_badguy_is_dead = True
                 return 'Kill First'
 
-        if second_badguy_x + 40 > bullet.bullet_x > second_badguy_x:
-            if second_badguy_y + 138 > bullet.bullet_y > second_badguy_y:
+        if not second_badguy_is_dead:
+            if second_badguy_x + 40 > bullet.bullet_x > second_badguy_x and \
+                    second_badguy_y + 138 > bullet.bullet_y > second_badguy_y:
                 bullets.pop(bullets.index(bullet))
+                second_badguy_is_dead = True
                 return 'Kill Second'
 
-        if third_badguy_x + 84 > bullet.bullet_x > third_badguy_x + 40:
-            if third_badguy_y + 138 > bullet.bullet_y > third_badguy_y:
+        if not third_badguy_is_dead:
+            if third_badguy_x + 84 > bullet.bullet_x > third_badguy_x + 40 and \
+                    third_badguy_y + 138 > bullet.bullet_y > third_badguy_y:
                 bullets.pop(bullets.index(bullet))
+                third_badguy_is_dead = True
                 return 'Kill Third'
 
 
