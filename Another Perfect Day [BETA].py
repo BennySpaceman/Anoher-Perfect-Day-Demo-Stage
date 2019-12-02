@@ -432,6 +432,25 @@ def show_menu():
         clock.tick(60)
 
 
+def check_bullet_hit():
+    global bullets
+    for bullet in bullets:
+        if first_badguy_x + 40 > bullet.bullet_x > first_badguy_x:
+            if first_badguy_y + 138 > bullet.bullet_y > first_badguy_y:
+                bullets.pop(bullets.index(bullet))
+                return 'Kill First'
+
+        if second_badguy_x + 40 > bullet.bullet_x > second_badguy_x:
+            if second_badguy_y + 138 > bullet.bullet_y > second_badguy_y:
+                bullets.pop(bullets.index(bullet))
+                return 'Kill Second'
+
+        if third_badguy_x + 84 > bullet.bullet_x > third_badguy_x + 40:
+            if third_badguy_y + 138 > bullet.bullet_y > third_badguy_y:
+                bullets.pop(bullets.index(bullet))
+                return 'Kill Third'
+
+
 def show_credits():
     global credits_running
 
@@ -452,12 +471,12 @@ def show_credits():
         print_text('Head programmer - Olyanin Danila', 100, 300, 25)
         print_text('Functions developer - Vlasov Daniil', 100, 340, 25)
         print_text('Functions developer - Malachin Arseniy', 100, 380, 25)
-        print_text('Assistance in programming - Ivanov Michail', 100, 420, 25)
+        print_text('Assistance in programming - Ivanov Mikhail', 100, 420, 25)
 
         print_text('Design division:', 700, 240, 40)
         print_text('Game designer - Vlasov Daniil', 700, 300, 25)
         print_text('Charachters artist - Malachin Arseniy', 700, 340, 25)
-        print_text('Composer - Ivanov Michail', 700, 380, 25)
+        print_text('Composer - Ivanov Mikhail', 700, 380, 25)
         print_text('Level artist - Vlasov Daniil', 700, 420, 25)
         print_text('Brand designer - Vlasov Daniil', 700, 460, 25)
 
@@ -619,7 +638,7 @@ def second_part():
 
 def game_cycle():
     global isClimbUp, isClimbDown, hero_x, hero_y, left, right, isRunning, isJump, ladderCounterUp, ladderCounterDown, \
-        start_combat, start_combat_timer, combat_theme
+        start_combat, start_combat_timer, combat_theme, door_allow
 
     while game_running:
         clock.tick(60)
@@ -634,7 +653,7 @@ def game_cycle():
 
         keys = pygame.key.get_pressed()
 
-        if keys[pygame.K_LSHIFT]:
+        if keys[pygame.K_ESCAPE]:
             pause()
 
         if not isSitting and not isClimbUp and not isClimbDown:
@@ -660,6 +679,7 @@ def game_cycle():
         win.blit(background, (0, 0))
         print_text(str(hero_x), 0, 0, 20)
         print_text(str(hero_y), 0, 30, 20)
+        print_text(str(check_bullet_hit()), 0, 80, 50)
         draw_hero()
         ladder_climb()
         draw_badguys()
@@ -679,7 +699,7 @@ def game_cycle():
                 ladderCounterDown = 43
                 isClimbDown = True
 
-            if hero_x > 170 and hero_x + hero_width < 280 and hero_y == 347:
+            if hero_x > 170 and hero_x + hero_width < 280 and hero_y == 347 and door_allow:
                 ladderCounterUp = 63
                 isClimbUp = True
 
@@ -700,7 +720,8 @@ def game_cycle():
 
 bullets = []
 
-show_intro()
-show_menu()
+# show_intro()
+# show_menu()
+game_cycle()
 
 pygame.quit()
