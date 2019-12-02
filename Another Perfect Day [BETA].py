@@ -297,6 +297,9 @@ def draw_badguys():
         if not third_badguy_is_dead:
             win.blit(pygame.transform.scale(pygame.image.load('Bad guy/Third/Third bad guy shoot left.png'),
                                             (84, 138)), (third_badguy_x, third_badguy_y))
+        if first_badguy_is_dead:
+            win.blit(pygame.transform.scale(pygame.image.load('Bad guy/First/Bad dead right.png'),
+                                            (171, 147)), (first_badguy_x - 150, first_badguy_y + 3))
 
 
 def jump():
@@ -634,7 +637,7 @@ def second_part():
 
         if 122 > start_combat_timer > 60:
             print_text('7', 0, 200, font_size=60, font_color=(0, 0, 0))
-            first_badguy_x += 5
+            first_badguy_x += 4
             second_badguy_x -= 5
             third_badguy_x -= 5
             win.blit(pygame.transform.scale(first_badguy_run_right[first_badguy_animCount // 5],
@@ -775,9 +778,11 @@ def game_cycle():
         pygame.display.update()
         clock.tick(60)
 
+
 bullets = []
 
-show_logo()
-show_menu()
+# show_logo()
+# show_menu()
+game_cycle()
 
 pygame.quit()
