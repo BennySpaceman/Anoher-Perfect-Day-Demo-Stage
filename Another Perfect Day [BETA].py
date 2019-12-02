@@ -303,6 +303,9 @@ def draw_badguys():
         if second_badguy_is_dead:
             win.blit(pygame.transform.scale(pygame.image.load('Bad guy/Second/Second bad guy dead.png'),
                                             (138, 138)), (second_badguy_x - 130, second_badguy_y + 12))
+        if third_badguy_is_dead:
+            win.blit(pygame.transform.scale(pygame.image.load('Bad guy/Third/Third bad guy dead.png'),
+                                            (138, 138)), (third_badguy_x + 60, second_badguy_y + 12))
 
 
 def jump():
@@ -327,7 +330,7 @@ def key_events():
         if event.type == pygame.QUIT:
             pygame.quit()
             quit()
-            
+
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE and not isSitting:
                 isShooting = True
@@ -398,10 +401,9 @@ def music_change_check():
 
 
 def show_logo():
-    global logo_running 
+    global logo_running
 
-    logo = pygame.transform.scale(pygame.image.load('VIMO Games Logo.png'),
-                                    (400, 400))
+    logo = pygame.transform.scale(pygame.image.load('VIMO Games Logo.png'), (400, 400))
 
     while logo_running:
         for event in pygame.event.get():
@@ -411,7 +413,7 @@ def show_logo():
 
         win.fill((0, 0, 0))
         win.blit(logo, (460, 160))
-        pygame.display.update()        
+        pygame.display.update()
         clock.tick(15)
         sleep(3)
         break
@@ -435,15 +437,15 @@ def show_menu():
         win.blit(menu_background, (0, 0))
         play_demo_button.draw(575, 420, 'Start demo', show_intro, 70)
         credits_button.draw(700, 510, 'Credits', show_credits, 70)
-        exit_button.draw(825, 600, 'Exit', quit, 70) 
-        
+        exit_button.draw(825, 600, 'Exit', quit, 70)
+
         pygame.display.update()
         clock.tick(60)
 
 
 def show_credits():
     global credits_running
-    
+
     back_button = Button(140, 60)
 
     while credits_running:
@@ -451,10 +453,10 @@ def show_credits():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-    
+
         win.fill((0, 0, 0))
         print_text('Another Perfect Day', 225, 5, 75)
-        print_text('VIMO Game Studio Crew:', 400, 100, 40) 
+        print_text('VIMO Game Studio Crew:', 400, 100, 40)
         print_text('Game director - Vlasov Daniil', 400, 170, 30)
 
         print_text('Programming division:', 100, 240, 40)
@@ -476,7 +478,7 @@ def show_credits():
 
         back_button.draw(1100, 625, 'Back', show_menu, 50)
 
-        pygame.display.update()        
+        pygame.display.update()
         clock.tick(60)
 
 
@@ -498,7 +500,7 @@ def show_intro():
 
         start_button.draw(1100, 625, 'Start', game_cycle, 50)
 
-        pygame.display.update()        
+        pygame.display.update()
         clock.tick(60)
 
 
@@ -705,7 +707,7 @@ def game_cycle():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                quit()   
+                quit()
 
         for bullet in bullets:
             if display_width > bullet.bullet_x > 0:
@@ -772,7 +774,7 @@ def game_cycle():
             if hero_x > 1100 and hero_x + hero_width < 1300 and hero_y == 347:
                 print_text('Oh, shit', 1000, 275, 20)
                 print_text('I need a keycard', 1000, 300, 20)
-                
+
                 if not door_allow:
                     start_combat = True
                     start_combat_timer = 350
