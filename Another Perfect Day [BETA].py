@@ -68,7 +68,7 @@ hero_stands_right = [pygame.image.load('Hero/Hero stand right.png'),
 hero_climb = [pygame.image.load('Hero/Hero climb (1).png'),
               pygame.image.load('Hero/Hero climb (2).png')]
 
-background = pygame.transform.scale(pygame.image.load('Warehouse Level (v.2.0).png'),
+background = pygame.transform.scale(pygame.image.load('Warehouse Level.png'),
                                     (display_width, display_height))
 
 pygame.mixer.music.load('Soundtrack.mp3')
