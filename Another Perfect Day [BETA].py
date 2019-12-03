@@ -354,7 +354,7 @@ def draw_badguys():
             win.blit(pygame.transform.scale(pygame.image.load('Bad guy/Third/Third bad guy dead.png'),
                                             (138, 138)), (third_badguy_x + 60, second_badguy_y + 12))
         first_bg_shoot()
-        if hero_y > 500:
+        if hero_y == 562:
             second_bg_shoot()
             third_bg_shoot()
 
@@ -386,7 +386,7 @@ def key_events():
             quit()
 
         if event.type == pygame.KEYDOWN and not game_over:
-            if event.key == pygame.K_SPACE and not isSitting and not isJump:
+            if event.key == pygame.K_SPACE and not isSitting and not isJump and part_two_is_running:
                 if not GG_cd:
                     isShooting = True
                     GG_gun_sound.play().set_volume(0.12)
