@@ -78,6 +78,7 @@ clock = pygame.time.Clock()
 GG_gun_sound = pygame.mixer.Sound('GG_gun_sound.ogg')
 BG_gun_sound = pygame.mixer.Sound('BG_gun_sound.ogg')
 game_over = False
+absolute_death = False
 logo_running = True
 menu_running = True
 credits_running = True
@@ -120,6 +121,7 @@ second_bg_cd = 0
 third_bg_cd = 0
 finish_counter = 0
 GG_cd = 0
+game_over_timer = -1
 
 class Button:
     def __init__(self, width, height):
@@ -503,7 +505,7 @@ def music_change_check():
 def show_logo():
     global logo_running
 
-    logo = pygame.transform.scale(pygame.image.load('VIMO Games Logo.png'), (400, 400))
+    logo = pygame.transform.scale(pygame.image.load('Full VIMO Logo.png'), (1280, 720))
 
     while logo_running:
         for event in pygame.event.get():
@@ -512,7 +514,7 @@ def show_logo():
                 quit()
 
         win.fill((0, 0, 0))
-        win.blit(logo, (460, 160))
+        win.blit(logo, (0, 0))
         pygame.display.update()
         clock.tick(15)
         sleep(3)
@@ -647,12 +649,13 @@ def check_bullet_hit():
 
 
 def check_bg_bullet_hit():
-    global bg_bullets, game_over
+    global bg_bullets, game_over, game_over_timer
     if not isSitting:
         for bullet in bg_bullets:
             if hero_x + 40 > bullet.bullet_x > hero_x and hero_y + hero_height > bullet.bullet_y > hero_y:
                 bg_bullets.pop(bg_bullets.index(bullet))
                 game_over = True
+                game_over_timer = 120
 
 
 def second_part():
@@ -794,7 +797,11 @@ def second_part():
 
 def game_cycle():
     global isClimbUp, isClimbDown, hero_x, hero_y, left, right, isRunning, isJump, ladderCounterUp, ladderCounterDown, \
-        start_combat, start_combat_timer, combat_theme, door_allow, got_a_card, game_finished, finish_counter, GG_cd
+        start_combat, start_combat_timer, combat_theme, door_allow, got_a_card, game_finished, finish_counter, GG_cd, \
+        game_over_timer, absolute_death, game_over
+
+    absolute_death = False
+    game_over = False
 
     while game_running:
         key_events()
@@ -845,12 +852,18 @@ def game_cycle():
         if GG_cd:
             GG_cd -= 1
 
+        if game_over_timer > 0:
+            game_over_timer -= 1
+        elif game_over_timer == 0:
+            absolute_death = True
         win.blit(background, (0, 0))
         print_text(str(hero_x), 0, 0, 20)
         if got_a_card:
             print_text('You got a card', 400, 400, 70)
         if game_finished:
             print_text("You've completed the game", 200, 600, 70)
+        if absolute_death:
+            print_text("You are dead", 400, 200, 70)
         check_bullet_hit()
         check_bg_bullet_hit()
         draw_hero()
