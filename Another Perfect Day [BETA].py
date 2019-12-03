@@ -8,8 +8,8 @@ display_height = 720
 hero_width = 84
 hero_height = 138
 speed = 5
-hero_x = 1000
-hero_y = 347
+hero_x = 80
+hero_y = 562
 first_badguy_x = 350
 first_badguy_y = 32
 second_badguy_x = 1070
@@ -76,7 +76,7 @@ pygame.mixer.music.play(-1)
 pygame.mixer.music.set_volume(0.12)
 clock = pygame.time.Clock()
 GG_gun_sound = pygame.mixer.Sound('GG_gun_sound.ogg')
-
+BG_gun_sound = pygame.mixer.Sound('BG_gun_sound.ogg')
 game_over = False
 logo_running = True
 menu_running = True
@@ -118,7 +118,8 @@ third_badguy_animCount = 0
 first_bg_cd = 0
 second_bg_cd = 0
 third_bg_cd = 0
-
+finish_counter = 0
+GG_cd = 0
 
 class Button:
     def __init__(self, width, height):
@@ -174,7 +175,8 @@ class BgBulletClass:
 def f_hero_stands_left():
     global smokeAnimCount
 
-    if not isClimbUp and not isClimbDown and not isSitting and not isShooting and not isJump and not isRunning and left:
+    if not isClimbUp and not isClimbDown and not isSitting and not isShooting and not isJump and not isRunning and left\
+            and not game_over:
         win.blit(pygame.transform.scale(hero_stands_left[smokeAnimCount // 10],
                                         (hero_width, hero_height)), (hero_x, hero_y))
         smokeAnimCount += 1
@@ -184,7 +186,7 @@ def f_hero_stands_right():
     global smokeAnimCount
 
     if not isClimbUp and not isClimbDown and not isSitting and \
-            not isShooting and not isJump and not isRunning and right:
+            not isShooting and not isJump and not isRunning and right and not game_over:
         win.blit(pygame.transform.scale(hero_stands_right[smokeAnimCount // 10],
                                         (hero_width, hero_height)), (hero_x, hero_y))
         smokeAnimCount += 1
@@ -193,7 +195,8 @@ def f_hero_stands_right():
 def f_hero_run_left():
     global animCount
 
-    if not isClimbUp and not isClimbDown and not isSitting and not isShooting and not isJump and isRunning and left:
+    if not isClimbUp and not isClimbDown and not isSitting and not isShooting and not isJump and isRunning and left\
+            and not game_over:
         win.blit(pygame.transform.scale(hero_run_left[animCount // 5], (hero_width, hero_height)), (hero_x, hero_y))
         animCount += 1
 
@@ -201,43 +204,44 @@ def f_hero_run_left():
 def f_hero_run_right():
     global animCount
 
-    if not isClimbUp and not isClimbDown and not isSitting and not isShooting and not isJump and isRunning and right:
+    if not isClimbUp and not isClimbDown and not isSitting and not isShooting and not isJump and isRunning and right\
+            and not game_over:
         win.blit(pygame.transform.scale(hero_run_right[animCount // 5], (hero_width, hero_height)), (hero_x, hero_y))
         animCount += 1
 
 
 def f_hero_jump_left():
-    if not isClimbUp and not isClimbDown and not isSitting and not isShooting and isJump and left:
+    if not isClimbUp and not isClimbDown and not isSitting and not isShooting and isJump and left and not game_over:
         win.blit(pygame.transform.scale(pygame.image.load('Hero/Hero jump left.png'),
                                         (hero_width, hero_height)), (hero_x, hero_y))
 
 
 def f_hero_jump_right():
-    if not isClimbUp and not isClimbDown and not isSitting and not isShooting and isJump and right:
+    if not isClimbUp and not isClimbDown and not isSitting and not isShooting and isJump and right and not game_over:
         win.blit(pygame.transform.scale(pygame.image.load('Hero/Hero jump right.png'),
                                         (hero_width, hero_height)), (hero_x, hero_y))
 
 
 def f_hero_shoot_left():
-    if not isClimbUp and not isClimbDown and not isSitting and isShooting and left:
+    if not isClimbUp and not isClimbDown and not isSitting and isShooting and left and not game_over:
         win.blit(pygame.transform.scale(pygame.image.load('Hero/Hero shoot left.png'),
                                         (hero_width, hero_height)), (hero_x, hero_y))
 
 
 def f_hero_shoot_right():
-    if not isClimbUp and not isClimbDown and not isSitting and isShooting and right:
+    if not isClimbUp and not isClimbDown and not isSitting and isShooting and right and not game_over:
         win.blit(pygame.transform.scale(pygame.image.load('Hero/Hero shoot right.png'),
                                         (hero_width, hero_height)), (hero_x, hero_y))
 
 
 def f_hero_sit_left():
-    if isSitting and left:
+    if isSitting and left and not game_over:
         win.blit(pygame.transform.scale(pygame.image.load('Hero/Hero sit left.png'),
                                         (hero_width, hero_height)), (hero_x, hero_y))
 
 
 def f_hero_sit_right():
-    if isSitting and right:
+    if isSitting and right and not game_over:
         win.blit(pygame.transform.scale(pygame.image.load('Hero/Hero sit right.png'),
                                         (hero_width, hero_height)), (hero_x, hero_y))
 
@@ -245,13 +249,23 @@ def f_hero_sit_right():
 def f_hero_climb():
     global climbAnim
 
-    if isClimbUp or isClimbDown:
+    if isClimbUp or isClimbDown and not game_over:
         win.blit(pygame.transform.scale(hero_climb[climbAnim // 10], (84, 147)), (hero_x, hero_y))
         climbAnim += 1
 
 
+def f_hero_dead_left():
+    if game_over and left:
+        win.blit(pygame.transform.scale(pygame.image.load('Hero/Hero dead left.png'), (195, 138)), (hero_x, hero_y+39))
+
+
+def f_hero_dead_right():
+    if game_over and right:
+        win.blit(pygame.transform.scale(pygame.image.load('Hero/Hero dead right.png'), (195, 138)), (hero_x, hero_y+39))
+
+
 def draw_hero():
-    global isRunning, animCount, smokeAnimCount, climbAnim
+    global isRunning, animCount, smokeAnimCount, climbAnim, finish_counter
 
     if climbAnim + 1 >= 20:
         climbAnim = 0
@@ -262,17 +276,28 @@ def draw_hero():
     if smokeAnimCount + 1 >= 20:
         smokeAnimCount = 0
 
-    f_hero_stands_left()
-    f_hero_stands_right()
-    f_hero_run_left()
-    f_hero_run_right()
-    f_hero_jump_left()
-    f_hero_jump_right()
-    f_hero_shoot_left()
-    f_hero_shoot_right()
-    f_hero_sit_left()
-    f_hero_sit_right()
-    f_hero_climb()
+    if not game_finished:
+        f_hero_stands_left()
+        f_hero_stands_right()
+        f_hero_run_left()
+        f_hero_run_right()
+        f_hero_jump_left()
+        f_hero_jump_right()
+        f_hero_shoot_left()
+        f_hero_shoot_right()
+        f_hero_sit_left()
+        f_hero_sit_right()
+        f_hero_climb()
+        f_hero_dead_left()
+        f_hero_dead_right()
+    else:
+        if 81 > finish_counter > 40:
+            f_hero_stands_right()
+            finish_counter -= 1
+        if 41 > finish_counter > 0:
+            pygame.draw.rect(win, (0, 0, 0), (1135, 340, 70, 150))
+            f_hero_stands_right()
+            finish_counter -= 1
 
     for i in bullets:
         i.draw(win)
@@ -351,24 +376,26 @@ def jump():
 
 
 def key_events():
-    global game_running, isRunning, isShooting, isSitting, facing, isJump, combat_theme, hero_action
+    global game_running, isRunning, isShooting, isSitting, facing, isJump, combat_theme, hero_action, GG_cd
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             quit()
 
-        if event.type == pygame.KEYDOWN:
+        if event.type == pygame.KEYDOWN and not game_over:
             if event.key == pygame.K_SPACE and not isSitting and not isJump:
-                isShooting = True
-                GG_gun_sound.play().set_volume(0.12)
-                if right:
-                    facing = 1
-                    bullets.append(BulletClass(hero_x + 70, hero_y + 45, facing))
+                if not GG_cd:
+                    isShooting = True
+                    GG_gun_sound.play().set_volume(0.12)
+                    if right:
+                        facing = 1
+                        bullets.append(BulletClass(hero_x + 70, hero_y + 45, facing))
 
-                if left:
-                    facing = -1
-                    bullets.append(BulletClass(hero_x + 10, hero_y + 45, facing))
+                    if left:
+                        facing = -1
+                        bullets.append(BulletClass(hero_x + 10, hero_y + 45, facing))
+                    GG_cd = 10
 
             if (event.key == pygame.K_DOWN or event.key == pygame.K_s) and not isJump and \
                     not isClimbUp and not isClimbDown:
@@ -377,7 +404,7 @@ def key_events():
             if event.key == pygame.K_f:
                 hero_action = True
 
-        if event.type == pygame.KEYUP:
+        if event.type == pygame.KEYUP and not game_over:
             if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                 isRunning = False
 
@@ -422,36 +449,42 @@ def pause():
 
 def first_bg_shoot():
     global first_bg_cd, bg_bullets
-    if not first_badguy_is_dead:
+    if not first_badguy_is_dead and not game_over:
         if not first_bg_cd:
             new_bullet = BgBulletClass(first_badguy_x + 74, first_badguy_y + 35, 1)
             new_bullet.draw(win)
             first_bg_cd = 60
             bg_bullets.append(new_bullet)
+            BG_gun_sound.play().set_volume(0.12)
+
         else:
             first_bg_cd -= 1
 
 
 def second_bg_shoot():
     global second_bg_cd, bg_bullets
-    if not second_badguy_is_dead:
+    if not second_badguy_is_dead and not game_over:
         if not second_bg_cd:
             new_bullet = BgBulletClass(second_badguy_x + 74, second_badguy_y + 30, 1)
             new_bullet.draw(win)
             second_bg_cd = 60
             bg_bullets.append(new_bullet)
+            BG_gun_sound.play().set_volume(0.12)
+
         else:
             second_bg_cd -= 1
 
 
 def third_bg_shoot():
     global third_bg_cd, bg_bullets
-    if not third_badguy_is_dead:
+    if not third_badguy_is_dead and not game_over:
         if not third_bg_cd:
             new_bullet = BgBulletClass(third_badguy_x, third_badguy_y + 30, -1)
             new_bullet.draw(win)
             third_bg_cd = 60
             bg_bullets.append(new_bullet)
+            BG_gun_sound.play().set_volume(0.12)
+
         else:
             third_bg_cd -= 1
 
@@ -599,21 +632,18 @@ def check_bullet_hit():
                     first_badguy_y + 138 > bullet.bullet_y > first_badguy_y:
                 bullets.pop(bullets.index(bullet))
                 first_badguy_is_dead = True
-                return 'Kill First'
 
         if not second_badguy_is_dead:
             if second_badguy_x + 40 > bullet.bullet_x > second_badguy_x and \
                     second_badguy_y + 138 > bullet.bullet_y > second_badguy_y:
                 bullets.pop(bullets.index(bullet))
                 second_badguy_is_dead = True
-                return 'Kill Second'
 
         if not third_badguy_is_dead:
             if third_badguy_x + 84 > bullet.bullet_x > third_badguy_x + 40 and \
                     third_badguy_y + 138 > bullet.bullet_y > third_badguy_y:
                 bullets.pop(bullets.index(bullet))
                 third_badguy_is_dead = True
-                return 'Kill Third'
 
 
 def check_bg_bullet_hit():
@@ -623,7 +653,6 @@ def check_bg_bullet_hit():
             if hero_x + 40 > bullet.bullet_x > hero_x and hero_y + hero_height > bullet.bullet_y > hero_y:
                 bg_bullets.pop(bg_bullets.index(bullet))
                 game_over = True
-                return 'Game Over'
 
 
 def second_part():
@@ -765,7 +794,7 @@ def second_part():
 
 def game_cycle():
     global isClimbUp, isClimbDown, hero_x, hero_y, left, right, isRunning, isJump, ladderCounterUp, ladderCounterDown, \
-        start_combat, start_combat_timer, combat_theme, door_allow, got_a_card, game_finished
+        start_combat, start_combat_timer, combat_theme, door_allow, got_a_card, game_finished, finish_counter, GG_cd
 
     while game_running:
         key_events()
@@ -793,7 +822,7 @@ def game_cycle():
         if keys[pygame.K_ESCAPE]:
             pause()
 
-        if not isSitting and not isClimbUp and not isClimbDown and not isShooting:
+        if not isSitting and not isClimbUp and not isClimbDown and not isShooting and not game_over:
             if (keys[pygame.K_LEFT] and hero_x > 5) or (keys[pygame.K_a] and hero_x > 5):
                 hero_x -= speed
                 left = True
@@ -812,6 +841,9 @@ def game_cycle():
                     isJump = True
             else:
                 jump()
+
+        if GG_cd:
+            GG_cd -= 1
 
         win.blit(background, (0, 0))
         print_text(str(hero_x), 0, 0, 20)
@@ -853,6 +885,7 @@ def game_cycle():
                     print_text('Oh, shit', 1000, 275, 20)
                     print_text('I need a keycard', 1000, 300, 20)
                 else:
+                    finish_counter = 80
                     game_finished = True
 
                 if not door_allow:
