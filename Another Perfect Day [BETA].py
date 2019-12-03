@@ -71,12 +71,10 @@ hero_climb = [pygame.image.load('Hero/Hero climb (1).png'),
 background = pygame.transform.scale(pygame.image.load('Warehouse Level.png'),
                                     (display_width, display_height))
 
-pygame.mixer.music.load('Soundtrack.mp3')
-pygame.mixer.music.play(-1)
-pygame.mixer.music.set_volume(0.12)
 clock = pygame.time.Clock()
 GG_gun_sound = pygame.mixer.Sound('GG_gun_sound.ogg')
 BG_gun_sound = pygame.mixer.Sound('BG_gun_sound.ogg')
+
 game_over = False
 absolute_death = False
 logo_running = True
@@ -505,7 +503,10 @@ def music_change_check():
 def show_logo():
     global logo_running
 
-    logo = pygame.transform.scale(pygame.image.load('Full VIMO Logo.png'), (1280, 720))
+    pygame.mixer.music.load('Logo sound.mp3')
+    pygame.mixer.music.play(1)
+    pygame.mixer.music.set_volume(0.25)
+    logo = pygame.image.load('Full VIMO Logo.png')
 
     while logo_running:
         for event in pygame.event.get():
@@ -524,6 +525,9 @@ def show_logo():
 def show_menu():
     global menu_running
 
+    pygame.mixer.music.load('Main Theme.mp3')
+    pygame.mixer.music.play(-1)
+    pygame.mixer.music.set_volume(0.25)
     menu_background = pygame.image.load('Menu.png')
 
     play_demo_button = Button(400, 70)
@@ -594,14 +598,28 @@ def show_intro():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-
+                
         win.fill((0, 0, 0))
 
-        print_text('The story of Another Perfect Day', 100, 100, 30)
+        print_text('Japan, Akita, year 2031', 25, 25, 30)
+    
+        print_text('There was a powerful electromagnetic pulse during massive hackers attack on Akita`s', 80, 100, 25)
+        print_text('government. The whole Japan lost power more than a month. During this time, huge amounts of', 25, 125, 25)
+        print_text('information were erased, hospitals lost life supporting systems, prison inmates could leave ', 25, 150, 25)
+        print_text('their cells and nobody could leave the country border by planes or trains.', 25, 175, 25)
+
+        print_text('A year later, a special task force Neuron was created by APD (Akita Police Department),', 80, 250, 25)
+        print_text('whose goal is eliminating potential hackers, as well as to prevent terrorist acts.', 25, 275, 25)
+        
+        print_text('Lloyd Davis is a prisoned hacker from UCA (United Cities of America), who was offered', 80, 350, 25)
+        print_text('to become a Neuron operative in exchange for early release.', 25, 375, 25)
+        
+        print_text('Davis first mission is to eliminate defendants of Japanese-italian hackers group Medjed', 80, 450, 25)
+        print_text('which commit suspicious acts in suburban warehouse...', 25, 475, 25)
 
         start_button.draw(1100, 625, 'Start', game_cycle, 50)
 
-        pygame.display.update()
+        pygame.display.update()        
         clock.tick(60)
 
 
@@ -646,6 +664,29 @@ def check_bullet_hit():
                     third_badguy_y + 138 > bullet.bullet_y > third_badguy_y:
                 bullets.pop(bullets.index(bullet))
                 third_badguy_is_dead = True
+
+
+def show_deathScreen():
+    global absolute_death
+
+    restart_button = Button(405, 100)
+    menu_button = Button(250, 100)
+
+    while absolute_death:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            
+        win.fill((0, 0, 0))
+
+        print_text('You are dead...', 70, 30, 150)
+
+        restart_button.draw(440, 300, 'Restart', game_cycle, 100)
+        menu_button.draw(520, 500, 'Menu', show_menu, 100)
+
+        pygame.display.update()
+        clock.tick(60)
 
 
 def check_bg_bullet_hit():
@@ -802,6 +843,11 @@ def game_cycle():
 
     absolute_death = False
     game_over = False
+
+    pygame.mixer.music.stop()
+    pygame.mixer.music.load('Soundtrack.mp3')
+    pygame.mixer.music.play(-1)
+    pygame.mixer.music.set_volume(0.25)
 
     while game_running:
         key_events()
