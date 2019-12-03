@@ -83,6 +83,7 @@ credits_running = True
 intro_running = True
 game_running = True
 outro_running = True
+game_finished = False
 left = False
 right = True
 isRunning = False
@@ -770,7 +771,7 @@ def second_part():
 
 def game_cycle():
     global isClimbUp, isClimbDown, hero_x, hero_y, left, right, isRunning, isJump, ladderCounterUp, ladderCounterDown, \
-        start_combat, start_combat_timer, combat_theme, door_allow, got_a_card
+        start_combat, start_combat_timer, combat_theme, door_allow, got_a_card, game_finished
 
     while game_running:
         key_events()
@@ -854,8 +855,11 @@ def game_cycle():
                 isClimbDown = True
 
             if hero_x > 1100 and hero_x + hero_width < 1300 and hero_y == 347:
-                print_text('Oh, shit', 1000, 275, 20)
-                print_text('I need a keycard', 1000, 300, 20)
+                if not got_a_card:
+                    print_text('Oh, shit', 1000, 275, 20)
+                    print_text('I need a keycard', 1000, 300, 20)
+                else:
+                    game_finished = True
 
                 if not door_allow:
                     start_combat = True
