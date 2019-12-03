@@ -73,8 +73,9 @@ background = pygame.transform.scale(pygame.image.load('Warehouse Level (v.2.0).p
 
 pygame.mixer.music.load('Soundtrack.mp3')
 pygame.mixer.music.play(-1)
-pygame.mixer.music.set_volume(0.25)
+pygame.mixer.music.set_volume(0.12)
 clock = pygame.time.Clock()
+GG_gun_sound = pygame.mixer.Sound('GG_gun_sound.ogg')
 
 game_over = False
 logo_running = True
@@ -358,14 +359,16 @@ def key_events():
             quit()
 
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE and not isSitting:
+            if event.key == pygame.K_SPACE and not isSitting and not isJump:
                 isShooting = True
+                GG_gun_sound.play().set_volume(0.12)
                 if right:
                     facing = 1
+                    bullets.append(BulletClass(hero_x + 70, hero_y + 45, facing))
 
                 if left:
                     facing = -1
-                bullets.append(BulletClass(round(hero_x + hero_width // 2), round(hero_y + hero_height - 92), facing))
+                    bullets.append(BulletClass(hero_x + 10, hero_y + 45, facing))
 
             if (event.key == pygame.K_DOWN or event.key == pygame.K_s) and not isJump and \
                     not isClimbUp and not isClimbDown:
@@ -400,7 +403,7 @@ def print_text(message, x, y, font_size, font_color=(255, 255, 255), font_type='
 def pause():
     global game_running
     paused = True
-
+    pygame.mixer.music.pause()
     while paused:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -410,6 +413,7 @@ def pause():
         p_keys = pygame.key.get_pressed()
 
         if p_keys[pygame.K_RETURN]:
+            pygame.mixer.music.unpause()
             paused = False
 
         pygame.display.update()
@@ -459,7 +463,7 @@ def music_change_check():
         pygame.mixer.music.stop()
         pygame.mixer.music.load('Combat theme.mp3')
         pygame.mixer.music.play(-1)
-        pygame.mixer.music.set_volume(0.25)
+        pygame.mixer.music.set_volume(0.12)
         combat_theme = False
 
 
@@ -559,7 +563,6 @@ def show_intro():
         win.fill((0, 0, 0))
 
         print_text('The story of Another Perfect Day', 100, 100, 30)
-        # print_text('', , , )
 
         start_button.draw(1100, 625, 'Start', game_cycle, 50)
 
@@ -630,19 +633,16 @@ def second_part():
 
     if start_combat:
         if 351 > start_combat_timer > 320:
-            # print_text('1', 0, 200, font_size=60, font_color=(0, 0, 0))
             win.blit(pygame.transform.scale(pygame.image.load('Bad guy/First/Bad guy transmitter(1).png'),
                                             (84, 138)), (first_badguy_x, first_badguy_y))
             start_combat_timer -= 1
 
         if 321 > start_combat_timer > 240:
-            # print_text('2', 0, 200, font_size=60, font_color=(0, 0, 0))
             win.blit(pygame.transform.scale(pygame.image.load('Bad guy/First/Bad guy transmitter(2).png'),
                                             (84, 138)), (first_badguy_x, first_badguy_y))
             start_combat_timer -= 1
 
         if 241 > start_combat_timer > 204:
-            # print_text('3', 0, 200, font_size=60, font_color=(0, 0, 0))
             first_badguy_x -= 3
             win.blit(pygame.transform.scale(first_badguy_run_left[first_badguy_animCount // 5],
                                             (84, 138)), (first_badguy_x, first_badguy_y))
@@ -655,7 +655,6 @@ def second_part():
             pygame.draw.rect(win, (0, 0, 0), (1080, 525, 70, 140))
 
         if 205 > start_combat_timer > 184:
-            # print_text('4', 0, 200, font_size=60, font_color=(0, 0, 0))
             first_badguy_x -= 3
             win.blit(pygame.transform.scale(first_badguy_run_left[first_badguy_animCount // 5],
                                             (84, 138)), (first_badguy_x, first_badguy_y))
@@ -670,7 +669,6 @@ def second_part():
                                             (84, 138)), (second_badguy_x, second_badguy_y))
 
         if 185 > start_combat_timer > 151:
-            # print_text('5', 0, 200, font_size=60, font_color=(0, 0, 0))
             first_badguy_y += 5
             second_badguy_x -= 5
             win.blit(pygame.transform.scale(first_badguy_climb[badguyLadderCount // 10],
@@ -691,7 +689,6 @@ def second_part():
             start_combat_timer -= 1
 
         if 152 > start_combat_timer > 121:
-            # print_text('6', 0, 200, font_size=60, font_color=(0, 0, 0))
             first_badguy_y += 5
             second_badguy_x -= 5
             win.blit(pygame.transform.scale(first_badguy_climb[badguyLadderCount // 10],
@@ -714,7 +711,6 @@ def second_part():
             start_combat_timer -= 1
 
         if 122 > start_combat_timer > 60:
-            # print_text('7', 0, 200, font_size=60, font_color=(0, 0, 0))
             first_badguy_x += 4
             second_badguy_x -= 5
             third_badguy_x -= 5
@@ -742,7 +738,6 @@ def second_part():
             start_combat_timer -= 1
 
         if 61 > start_combat_timer > 0:
-            # print_text('8', 0, 200, font_size=60, font_color=(0, 0, 0))
             second_badguy_x -= 5
             win.blit(pygame.transform.scale(pygame.image.load('Bad guy/First/Bad guy shoot right.png'),
                                             (84, 138)), (first_badguy_x, first_badguy_y))
@@ -757,7 +752,6 @@ def second_part():
                                             (84, 138)), (third_badguy_x, third_badguy_y))
             start_combat_timer -= 1
         if start_combat_timer == 0:
-            # print_text('9', 0, 200, font_size=60, font_color=(0, 0, 0))
             win.blit(pygame.transform.scale(pygame.image.load('Bad guy/First/Bad guy shoot right.png'),
                                             (84, 138)), (first_badguy_x, first_badguy_y))
             win.blit(pygame.transform.scale(pygame.image.load('Bad guy/Second/Second bad guy shoot right.png'),
@@ -821,10 +815,10 @@ def game_cycle():
 
         win.blit(background, (0, 0))
         print_text(str(hero_x), 0, 0, 20)
-        # print_text(str(hero_y), 0, 30, 20)
-        # print_text(str(check_bg_bullet_hit()), 0, 80, 50)
         if got_a_card:
-            print_text('asdlfkjasd', 400, 400, 70)
+            print_text('You got a card', 400, 400, 70)
+        if game_finished:
+            print_text("You've completed the game", 200, 600, 70)
         check_bullet_hit()
         check_bg_bullet_hit()
         draw_hero()
@@ -876,8 +870,7 @@ def game_cycle():
 bullets = []
 bg_bullets = []
 
-# show_logo()
-# show_menu()
-game_cycle()
+show_logo()
+show_menu()
 
 pygame.quit()
