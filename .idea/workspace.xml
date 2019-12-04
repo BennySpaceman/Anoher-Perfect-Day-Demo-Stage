@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1d4a3853-3687-4e05-98b9-ebe37968c3c0" name="Default Changelist" comment="">
+    <list default="true" id="f19ad31b-047a-47b7-a2d7-abedcef230fe" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/24.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/45.mp3" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Another Perfect Day [BETA].py" beforeDir="false" afterPath="$PROJECT_DIR$/Another Perfect Day [BETA].py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Another Perfect Day [BETA][BETA].py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Another Perfect Day [PRE-RELEASE].py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bullet UK.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Key Card.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Lazer Bullet 2.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Lazer Bullet.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/var 2 .mp3" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -93,6 +102,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="Another Perfect Day [PRE-RELEASE]" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="GameProject" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Another Perfect Day [PRE-RELEASE].py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="Game-O" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="GameProject" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -138,6 +168,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.Another Perfect Day [BETA]" />
+        <item itemvalue="Python.Another Perfect Day [PRE-RELEASE]" />
         <item itemvalue="Python.Новый текстовый документ" />
         <item itemvalue="Python.Game-O" />
         <item itemvalue="Python.Game" />
@@ -152,7 +183,7 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="1d4a3853-3687-4e05-98b9-ebe37968c3c0" name="Default Changelist" comment="" />
+      <changelist id="f19ad31b-047a-47b7-a2d7-abedcef230fe" name="Default Changelist" comment="" />
       <created>1574309761226</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />

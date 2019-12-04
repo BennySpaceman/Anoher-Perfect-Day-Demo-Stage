@@ -17,8 +17,7 @@ second_badguy_y = 562
 third_badguy_x = 1070
 third_badguy_y = 562
 
-
-Game_Name = 'Another perfect day [BETA]'
+Game_Name = 'Another perfect day [ONE-SHOT DEMO]'
 win = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_icon(pygame.image.load('Game icon.png'))
 pygame.display.set_caption(Game_Name)
@@ -172,6 +171,175 @@ class BgBulletClass:
                           (self.bullet_x, self.bullet_y))
 
 
+def show_logo():
+    global logo_running
+
+    pygame.mixer.music.load('Logo sound.mp3')
+    pygame.mixer.music.play(1)
+    pygame.mixer.music.set_volume(0.25)
+    logo = pygame.image.load('Full VIMO Logo.png')
+
+    while logo_running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+
+        win.fill((0, 0, 0))
+        win.blit(logo, (0, 0))
+        pygame.display.update()
+        clock.tick(15)
+        sleep(3)
+        break
+
+
+def show_menu():
+    global menu_running
+
+    pygame.mixer.music.load('Main Theme.mp3')
+    pygame.mixer.music.play(-1)
+    pygame.mixer.music.set_volume(0.25)
+    menu_background = pygame.image.load('Menu.png')
+
+    play_demo_button = Button(400, 70)
+    credits_button = Button(275, 70)
+    exit_button = Button(150, 70)
+
+    while menu_running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+
+        win.blit(menu_background, (0, 0))
+        play_demo_button.draw(575, 420, 'Start demo', show_intro, 70)
+        credits_button.draw(700, 510, 'Credits', show_credits, 70)
+        exit_button.draw(825, 600, 'Exit', quit, 70)
+
+        pygame.display.update()
+        clock.tick(60)
+
+
+def show_credits():
+    global credits_running
+
+    back_button = Button(140, 60)
+
+    while credits_running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+
+        win.fill((0, 0, 0))
+        print_text('Another Perfect Day', 225, 5, 75)
+        print_text('VIMO Game Studio Crew:', 400, 100, 40)
+        print_text('Game director - Vlasov Daniil', 400, 170, 30)
+
+        print_text('Programming division:', 100, 240, 40)
+        print_text('Head programmer - Olyanin Danila', 100, 300, 25)
+        print_text('Functions developer - Vlasov Daniil', 100, 340, 25)
+        print_text('Functions developer - Malachin Arseniy', 100, 380, 25)
+        print_text('Assistance in programming - Ivanov Michail', 100, 420, 25)
+
+        print_text('Design division:', 700, 240, 40)
+        print_text('Game designer - Vlasov Daniil', 700, 300, 25)
+        print_text('Charachters and artist - Malachin Arseniy', 700, 340, 25)
+        print_text('Composer - Ivanov Michail', 700, 380, 25)
+        print_text('Level artist - Vlasov Daniil', 700, 420, 25)
+        print_text('Brand designer - Vlasov Daniil', 700, 460, 25)
+
+        print_text('Special thanks to', 500, 550, 30)
+        print_text('ABTOZAK Group ', 495, 590, 40)
+        print_text('for writing Game`s Main Theme', 420, 640, 30)
+
+        back_button.draw(1100, 625, 'Back', show_menu, 50)
+
+        pygame.display.update()
+        clock.tick(60)
+
+
+def show_intro():
+    global intro_running
+
+    start_button = Button(150, 60)
+
+    while intro_running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+                
+        win.fill((0, 0, 0))
+
+        print_text('Japan, Akita, year 2031', 25, 25, 30)
+    
+        print_text('There was a powerful electromagnetic pulse during massive hackers attack on Akita`s', 80, 100, 24)
+        print_text('government. The whole Japan lost power more than a month. During this time, huge amounts of', 25, 125, 24)
+        print_text('information were erased, hospitals lost life supporting systems, prison inmates could leave ', 25, 150, 24)
+        print_text('their cells and nobody could leave the country border by planes or trains.', 25, 175, 24)
+
+        print_text('A year later, a special task force Neuron was created by APD (Akita Police Department),', 80, 250, 24)
+        print_text('whose goal is eliminating potential hackers, as well as to prevent terrorist acts.', 25, 275, 24)
+        
+        print_text('Lloyd Davis is a prisoned hacker from UCA (United Cities of America), who was offered', 80, 350, 24)
+        print_text('to become a Neuron operative in exchange for early release.', 25, 375, 25)
+        
+        print_text('Davis first mission is to eliminate defendants of Japanese-italian hackers group Medjed', 80, 450, 24)
+        print_text('which commit suspicious acts in suburban warehouse...', 25, 475, 24)
+
+        start_button.draw(1100, 625, 'Start', game_cycle, 50)
+
+        pygame.display.update()        
+        clock.tick(60)
+
+
+def show_outro():
+    global outro_running
+
+    pygame.mixer.music.stop()
+    menu_button = Button(460, 70)
+
+    while outro_running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+
+        win.fill((0, 0, 0))
+
+        print_text('Demo is over', 300, 100, 100)
+        print_text('Thanks for playing!', 150, 200, 100)
+
+        menu_button.draw(400, 400, 'Close Demo', quit, 75)
+
+        pygame.display.update()
+        clock.tick(60)
+
+
+def show_death_screen():
+    global absolute_death
+
+    pygame.mixer.music.stop()
+    menu_button = Button(460, 70)
+
+    while absolute_death:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+
+        win.fill((0, 0, 0))
+
+        print_text('You are dead...', 270, 100, 100)
+        print_text('Demo is over', 310, 200, 100)
+
+        menu_button.draw(400, 400, 'Close Demo', quit, 75)
+
+        pygame.display.update()
+        clock.tick(60)
+
+
 def f_hero_stands_left():
     global smokeAnimCount
 
@@ -298,7 +466,7 @@ def draw_hero():
             pygame.draw.rect(win, (0, 0, 0), (1135, 340, 70, 150))
             f_hero_stands_right()
             finish_counter -= 1
-
+    
     for i in bullets:
         i.draw(win)
 
@@ -500,150 +668,6 @@ def music_change_check():
         combat_theme = False
 
 
-def show_logo():
-    global logo_running
-
-    pygame.mixer.music.load('Logo sound.mp3')
-    pygame.mixer.music.play(1)
-    pygame.mixer.music.set_volume(0.25)
-    logo = pygame.image.load('Full VIMO Logo.png')
-
-    while logo_running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
-
-        win.fill((0, 0, 0))
-        win.blit(logo, (0, 0))
-        pygame.display.update()
-        clock.tick(15)
-        sleep(3)
-        break
-
-
-def show_menu():
-    global menu_running
-
-    pygame.mixer.music.load('Main Theme.mp3')
-    pygame.mixer.music.play(-1)
-    pygame.mixer.music.set_volume(0.25)
-    menu_background = pygame.image.load('Menu.png')
-
-    play_demo_button = Button(400, 70)
-    credits_button = Button(275, 70)
-    exit_button = Button(150, 70)
-
-    while menu_running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
-
-        win.blit(menu_background, (0, 0))
-        play_demo_button.draw(575, 420, 'Start demo', show_intro, 70)
-        credits_button.draw(700, 510, 'Credits', show_credits, 70)
-        exit_button.draw(825, 600, 'Exit', quit, 70)
-
-        pygame.display.update()
-        clock.tick(60)
-
-
-def show_credits():
-    global credits_running
-
-    back_button = Button(140, 60)
-
-    while credits_running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
-
-        win.fill((0, 0, 0))
-        print_text('Another Perfect Day', 225, 5, 75)
-        print_text('VIMO Game Studio Crew:', 400, 100, 40)
-        print_text('Game director - Vlasov Daniil', 400, 170, 30)
-
-        print_text('Programming division:', 100, 240, 40)
-        print_text('Head programmer - Olyanin Danila', 100, 300, 25)
-        print_text('Functions developer - Vlasov Daniil', 100, 340, 25)
-        print_text('Functions developer - Malachin Arseniy', 100, 380, 25)
-        print_text('Assistance in programming - Ivanov Michail', 100, 420, 25)
-
-        print_text('Design division:', 700, 240, 40)
-        print_text('Game designer - Vlasov Daniil', 700, 300, 25)
-        print_text('Charachters and artist - Malachin Arseniy', 700, 340, 25)
-        print_text('Composer - Ivanov Michail', 700, 380, 25)
-        print_text('Level artist - Vlasov Daniil', 700, 420, 25)
-        print_text('Brand designer - Vlasov Daniil', 700, 460, 25)
-
-        print_text('Special thanks to', 500, 550, 30)
-        print_text('ABTOZAK Group ', 495, 590, 40)
-        print_text('for writing Game`s Main Theme', 420, 640, 30)
-
-        back_button.draw(1100, 625, 'Back', show_menu, 50)
-
-        pygame.display.update()
-        clock.tick(60)
-
-
-def show_intro():
-    global intro_running
-
-    start_button = Button(150, 60)
-
-    while intro_running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
-                
-        win.fill((0, 0, 0))
-
-        print_text('Japan, Akita, year 2031', 25, 25, 30)
-    
-        print_text('There was a powerful electromagnetic pulse during massive hackers attack on Akita`s', 80, 100, 25)
-        print_text('government. The whole Japan lost power more than a month. During this time, huge amounts of', 25, 125, 25)
-        print_text('information were erased, hospitals lost life supporting systems, prison inmates could leave ', 25, 150, 25)
-        print_text('their cells and nobody could leave the country border by planes or trains.', 25, 175, 25)
-
-        print_text('A year later, a special task force Neuron was created by APD (Akita Police Department),', 80, 250, 25)
-        print_text('whose goal is eliminating potential hackers, as well as to prevent terrorist acts.', 25, 275, 25)
-        
-        print_text('Lloyd Davis is a prisoned hacker from UCA (United Cities of America), who was offered', 80, 350, 25)
-        print_text('to become a Neuron operative in exchange for early release.', 25, 375, 25)
-        
-        print_text('Davis first mission is to eliminate defendants of Japanese-italian hackers group Medjed', 80, 450, 25)
-        print_text('which commit suspicious acts in suburban warehouse...', 25, 475, 25)
-
-        start_button.draw(1100, 625, 'Start', game_cycle, 50)
-
-        pygame.display.update()        
-        clock.tick(60)
-
-
-def show_outro():
-    global outro_running
-
-    menu_button = Button(400, 60)
-
-    while outro_running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
-
-        win.fill((0, 0, 0))
-
-        print_text('Thanks for playing!', 700, 100, 50)
-
-        menu_button.draw(900, 625, 'Back to the menu', show_menu, 50)
-
-        pygame.display.update()
-        clock.tick(60)
-
-
 def check_bullet_hit():
     global bullets, first_badguy_is_dead, second_badguy_is_dead, third_badguy_is_dead
     for bullet in bullets:
@@ -664,29 +688,6 @@ def check_bullet_hit():
                     third_badguy_y + 138 > bullet.bullet_y > third_badguy_y:
                 bullets.pop(bullets.index(bullet))
                 third_badguy_is_dead = True
-
-
-def show_deathScreen():
-    global absolute_death
-
-    restart_button = Button(405, 100)
-    menu_button = Button(250, 100)
-
-    while absolute_death:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
-            
-        win.fill((0, 0, 0))
-
-        print_text('You are dead...', 70, 30, 150)
-
-        restart_button.draw(440, 300, 'Restart', game_cycle, 100)
-        menu_button.draw(520, 500, 'Menu', show_menu, 100)
-
-        pygame.display.update()
-        clock.tick(60)
 
 
 def check_bg_bullet_hit():
@@ -824,6 +825,7 @@ def second_part():
             win.blit(pygame.transform.scale(pygame.image.load('Bad guy/Third/Third bad guy shoot left.png'),
                                             (84, 138)), (third_badguy_x, third_badguy_y))
             start_combat_timer -= 1
+        
         if start_combat_timer == 0:
             win.blit(pygame.transform.scale(pygame.image.load('Bad guy/First/Bad guy shoot right.png'),
                                             (84, 138)), (first_badguy_x, first_badguy_y))
@@ -902,14 +904,18 @@ def game_cycle():
             game_over_timer -= 1
         elif game_over_timer == 0:
             absolute_death = True
+        
         win.blit(background, (0, 0))
-        print_text(str(hero_x), 0, 0, 20)
-        if got_a_card:
-            print_text('You got a card', 400, 400, 70)
+        
+        # if got_a_card:
+            
+        
         if game_finished:
-            print_text("You've completed the game", 200, 600, 70)
+            show_outro()
+        
         if absolute_death:
-            print_text("You are dead", 400, 200, 70)
+            show_death_screen()
+        
         check_bullet_hit()
         check_bg_bullet_hit()
         draw_hero()
@@ -919,7 +925,7 @@ def game_cycle():
 
         if hero_action:
             if hero_x > 1050 and hero_x + hero_width < 1200 and hero_y == 562:
-                pygame.draw.rect(win, (0, 0, 0), (800, 465, 430, 80))
+                pygame.draw.rect(win, (0, 0, 0), (800, 465, 410, 70))
                 print_text("It's guard room", 820, 470, 20)
                 print_text("I'd better not to enter this door", 820, 500, 20)
 
@@ -941,7 +947,8 @@ def game_cycle():
 
             if hero_x > 1100 and hero_x + hero_width < 1300 and hero_y == 347:
                 if not got_a_card:
-                    print_text('Oh, shit', 1000, 275, 20)
+                    pygame.draw.rect(win, (0, 0, 0), (970, 270, 250, 60))
+                    print_text('Oh, sh*t', 1000, 275, 20)
                     print_text('I need a keycard', 1000, 300, 20)
                 else:
                     finish_counter = 80
@@ -954,6 +961,9 @@ def game_cycle():
 
             if hero_x > 800 and hero_x + hero_width < 950 and hero_y == 562 and part_two_is_running:
                 got_a_card = True
+                pygame.draw.rect(win, (0, 0, 0), (670, 470, 390, 80))
+                print_text('Oh, I`ve found a keycard', 720, 480, 20)
+                print_text('Now I can enter that room', 720, 510, 20)
 
         pygame.display.update()
         clock.tick(60)
